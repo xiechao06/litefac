@@ -1,0 +1,17 @@
+path.py>=3.0.1
+CodernityDB>=0.4.2
+APScheduler>=2.1.1
+-e git+https://github.com/xiechao06/Flask-NavBar.git@f4c19e3729953d1429cfa2c9e26036e023c6f0d8#egg=Flask_NavBar-dev
+-e git+https://github.com/xiechao06/Flask-Report.git#egg=Flask_Report-dev
+-e git+https://github.com/xiechao06/lite-sm.git@9204dcaba550ab8da9450576ba95c54c93259406#egg=lite_sm-dev
+-e git+https://github.com/xiechao06/nav-bar.git@48a007c1e1b589d40e58669ae7b40a6900d71c79#egg=nav_bar-dev
+-e git+https://github.com/xiechao06/WorkFlowRepr.git#egg=work_flow_repr-dev
+-e git+https://github.com/xiechao06/pyfeature.git@92e086490ab44384dc21ecea65592c302273feab#egg=pyfeature-dev
+-e git+https://github.com/xiechao06/Flask-DataBrowser.git@0f5c4d6a0acd14f630422420da04a71317485b68#egg=Flask_DataBrowser-dev
+-e git+https://github.com/xiechao06/yawf.git@dc581f919c853eed866684c11082dac1a6522d83#egg=yawf-dev
+Flask-Mail>=0.9.0
+Pygments>=1.6
+import-file>=1.11
+MySQL-python>=1.2.3
+Flask-Babel>=0.8
+Babel>=1.3
