@@ -1,5 +1,5 @@
-<ul>
+<ul class='unstyled'>
   {% for row in field_value %}
-  <li><a href="{{ url_for("admin2.group", id_=row.id, url=request.url) }}">{{ row.name}}</a></li>
+  <li><a href="{{ url_for("admin2.group", id_=row.id, url=request.url) }}" style='font-size: 1em'>{{ row.name}}</a></li>
   {% endfor %}
 </ul>

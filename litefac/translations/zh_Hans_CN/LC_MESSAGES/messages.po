@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-08-07 17:41+0800\n"
+"POT-Creation-Date: 2013-10-28 19:01+0800\n"
 "PO-Revision-Date: 2013-04-04 12:40+0800\n"
 "Last-Translator: xiechao<xiechao06@gmail.com>\n"
 "Language-Team: zh_CN <LL@li.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 0.9.6\n"
+"Generated-By: Babel 1.3\n"
 
 #: action.py:41
 #, python-format
@@ -38,75 +38,75 @@ msgstr "%(model_name)s[%%s]不能被%(action)s"
 msgid "remove"
 msgstr "删除"
 
-#: base.py:425 base.py:1335
+#: base.py:428 base.py:1360
 #, python-format
 msgid "can't apply %(action)s due to %(reason)s"
 msgstr "操作%(action)s失败，原因是%(reason)s"
 
-#: base.py:441 base.py:1347
+#: base.py:444 base.py:1372
 #, python-format
 msgid "Failed to update %(model_name)s %(objs)s due to %(error)s"
 msgstr "更新%(model_name)s失败，原因是%(error)s"
 
-#: base.py:445 base.py:1143 base.py:1351
+#: base.py:448 base.py:1168 base.py:1376
 #, python-format
 msgid "invalid action %(action)s"
 msgstr "操作%(action)s非法"
 
-#: base.py:455
+#: base.py:471
 msgid "update"
 msgstr "更新"
 
-#: base.py:457
+#: base.py:473
 #, python-format
 msgid "%(model_name)s %(obj)s was updated and saved"
 msgstr "%(model_name)s(%(obj)s)已经被更新并保存"
 
-#: base.py:465
+#: base.py:481
 #, python-format
 msgid "Failed to update %(model_name)s %(obj)s due to %(error)s"
 msgstr "更新%(model_name)s失败，原因是%(error)s"
 
-#: base.py:507 base.py:624
+#: base.py:523 base.py:643
 #, python-format
 msgid "%(model_name)s %(model)s was created successfully"
 msgstr "成功创建%(model_name)s-(%(model)s)!"
 
-#: base.py:508 templates/__data_browser__/form_mob.html:82
+#: base.py:524 templates/__data_browser__/form_mob.html:82
 #: templates/__data_browser__/macro.html:206
 msgid "add another"
 msgstr "再增加一个"
 
-#: base.py:609
+#: base.py:628
 #, python-format
 msgid "%(user)s performed %(action)s"
 msgstr "用户%(user)s执行了%(action)s操作"
 
-#: base.py:626 templates/__data_browser__/form_mob.html:48
-#: templates/__data_browser__/list.html:278
+#: base.py:645 templates/__data_browser__/form_mob.html:48
+#: templates/__data_browser__/list.html:279
 #: templates/__data_browser__/list_mob.html:97
 #: templates/__data_browser__/macro.html:180
 msgid "create"
 msgstr "新建"
 
-#: base.py:634 base.py:645
+#: base.py:653 base.py:664
 #, python-format
 msgid ""
 "you are viewing %(model_name)s-%(obj)s, since you have only read "
 "permission"
 msgstr "您正在查看%(model_name)s-%(obj)s, 因为您只有只读权限"
 
-#: base.py:638
+#: base.py:657
 #, python-format
 msgid "edit %(model_name)s-%(objs)s"
 msgstr "正在编辑%(model_name)s-%(objs)s"
 
-#: base.py:649
+#: base.py:668
 #, python-format
 msgid "edit %(model_name)s-%(obj)s"
 msgstr "正在编辑%(model_name)s-%(obj)s"
 
-#: base.py:652
+#: base.py:671
 #, python-format
 msgid "create %(model_name)s"
 msgstr "正在创建%(model_name)s"
@@ -115,24 +115,24 @@ msgstr "正在创建%(model_name)s"
 msgid "all"
 msgstr "所有"
 
-#: utils.py:184
+#: utils.py:185
 #, python-format
 msgid ""
 "this operation needs the following permissions: %(permissions)s, contact "
 "administrator to grant them!"
 msgstr "本操作需要如下权限: %(permissions)s，请联系管理员获取权限！"
 
-#: utils.py:188
+#: utils.py:189
 msgid "Sorry, object doesn't exist!"
 msgstr "对不起, 对象不存在!"
 
-#: utils.py:198
+#: utils.py:199
 #, python-format
 msgid "Internal error \"%(err)s\", please contact us!"
 msgstr "内部错误\"%(err)s\"， 请联系我们！"
 
 #: convert_utils/sa.py:61 convert_utils/sa.py:182 convert_utils/sa.py:189
-#: form/convert.py:281 form/convert.py:288 form/validators.py:33
+#: form/convert.py:291 form/convert.py:300 form/validators.py:33
 msgid "This field must be unique, but it already exists!"
 msgstr "该字段不能重复，该字段的值已经存在"
 
@@ -188,43 +188,43 @@ msgstr "必须小于%%(min)s, 大于%%(max)s"
 msgid "Invalid email address."
 msgstr "非法的邮箱地址"
 
-#: convert_utils/sa.py:176 convert_utils/sa.py:225 form/convert.py:187
-#: form/convert.py:291
+#: convert_utils/sa.py:176 convert_utils/sa.py:225 form/convert.py:192
+#: form/convert.py:303
 msgid "this field can't be empty"
 msgstr "该字段不能为空"
 
-#: convert_utils/sa.py:193 form/convert.py:344
+#: convert_utils/sa.py:193 form/convert.py:363
 #, python-format
 msgid "value of this field must be %(values)s"
 msgstr "该字段的值必须是%(values)s"
 
-#: convert_utils/sa.py:194 form/convert.py:345
+#: convert_utils/sa.py:194 form/convert.py:364
 #, python-format
 msgid " or %(last_value)s"
 msgstr " 或者 %(last_value)s"
 
-#: convert_utils/sa.py:202 form/convert.py:387
+#: convert_utils/sa.py:202 form/convert.py:414
 msgid "this field must bigger than 0"
 msgstr "该字段必须大于0"
 
-#: form/convert.py:338
+#: form/convert.py:354
 #, python-format
 msgid "length exceeds %(max_length)%d"
 msgstr "长度不能超过%(max_length)%d"
 
-#: form/convert.py:404
+#: form/convert.py:434
 msgid "this field must between 1901 and 2155"
 msgstr "该字段必须在1901和2155之间"
 
-#: form/convert.py:410
+#: form/convert.py:440
 msgid "this field must be a valid IP address"
 msgstr "该字段必须是合法的IP地址"
 
-#: form/convert.py:416
+#: form/convert.py:446
 msgid "this field must be a valid MAC address"
 msgstr "该字段必须是合法的MAC地址"
 
-#: form/convert.py:422
+#: form/convert.py:452
 msgid "this field must be a valid UUID"
 msgstr "该字段必须是合法的UUID"
 
@@ -232,7 +232,7 @@ msgstr "该字段必须是合法的UUID"
 msgid "Not a valid choice"
 msgstr "选择错误"
 
-#: form/form.py:70
+#: form/form.py:85
 msgid "Invalid time format"
 msgstr "错误的时间格式"
 
@@ -253,18 +253,18 @@ msgid "back"
 msgstr "返回"
 
 #: templates/__data_browser__/form.html:12
-#: templates/__data_browser__/list.html:262
-#: templates/__data_browser__/list.html:284
+#: templates/__data_browser__/list.html:263
+#: templates/__data_browser__/list.html:285
 msgid "help"
 msgstr "帮助"
 
 #: templates/__data_browser__/form.html:23
-#: templates/__data_browser__/list.html:292
+#: templates/__data_browser__/list.html:293
 msgid "Help"
 msgstr "帮助"
 
 #: templates/__data_browser__/form.html:27
-#: templates/__data_browser__/list.html:298
+#: templates/__data_browser__/list.html:299
 msgid "close"
 msgstr "关闭"
 
@@ -309,30 +309,30 @@ msgstr "已经是第一页"
 msgid "no more page!"
 msgstr "已经是最后一页"
 
-#: templates/__data_browser__/list.html:139
+#: templates/__data_browser__/list.html:140
 msgid "please choose one item!"
 msgstr "请至少选择一条记录！"
 
-#: templates/__data_browser__/list.html:142
+#: templates/__data_browser__/list.html:143
 #: templates/__data_browser__/list.html:404
 #: templates/__data_browser__/list.html:437
 msgid "batch edit"
 msgstr "批量修改"
 
-#: templates/__data_browser__/list.html:149
+#: templates/__data_browser__/list.html:150
 #, python-format
 msgid "Are you sure to %%s the selected item(s)?"
 msgstr "您确认要对选中的记录执行操作(%%s)?"
 
-#: templates/__data_browser__/list.html:152
+#: templates/__data_browser__/list.html:153
 msgid "Attention!"
 msgstr "注意"
 
-#: templates/__data_browser__/list.html:236
+#: templates/__data_browser__/list.html:237
 msgid "no results matched!"
 msgstr "没有符合条件的结果"
 
-#: templates/__data_browser__/list.html:271
+#: templates/__data_browser__/list.html:272
 #, python-format
 msgid "totally: %(count)d"
 msgstr "共%(count)d条"
