@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 import os
 from sqlalchemy.exc import SQLAlchemyError
-from flask import (Flask, render_template, request, session, g, url_for,
+from flask import (Flask, render_template, request, session, g, url_for, _request_ctx_stack,
                    current_app)
 from flask.ext.babel import Babel, gettext
 from flask.ext.nav_bar import FlaskNavBar
@@ -332,10 +332,11 @@ def _():
     from litefac import apis
 
     # 需要以guest用户身份登录
-    user = apis.auth.authenticate('guest', 'guest')
-    login_user(user)
-    identity_changed.send(current_app._get_current_object(),
-                          identity=Identity(user.id))
+    if _request_ctx_stack.top:
+        user = apis.auth.authenticate('guest', 'guest')
+        login_user(user)
+        identity_changed.send(current_app._get_current_object(),
+                            identity=Identity(user.id))
     #g.locale = get_locale()
 
 from work_flow_repr import Event
