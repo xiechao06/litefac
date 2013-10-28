@@ -1,0 +1,129 @@
+{% if field_value %}
+  <table class="table table-striped table-bordered table-condensed">
+    <thead>
+    <tr>
+      {% if permissions.SchedulerPermission.can() %}
+        <th>操作</th>
+      {% endif %}
+      <th>子订单号</th>
+      <th>产品名称</th>
+      <th>技术要求</th>
+      {% if not obj.measured_by_weight %}
+        <th>数量</th>
+        <th>数量单位</th>
+        <th>规格</th>
+        <th>型号</th>
+      {% endif %}
+      <th>交货日期</th>
+      <th>净重(KG)</th>
+      <th>卸货点</th>
+      <th>是否加急</th>
+      <th>是否退货</th>
+      {% if permissions.SchedulerPermission.can() %}
+        <th>待排产工单数</th>
+        <th>待预排产数量</th>
+      {% else %}
+        <th>已发货重量(KG)
+        </th>
+        <th>待发货重量(KG)</th>
+      {% endif %}
+      <th>图片</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for sub_order in field_value %}
+      <tr>
+        {% if permissions.SchedulerPermission.can() %}
+          <td>
+            {% if sub_order.remaining_quantity|int > 0 and obj.refined and obj.dispatched %}
+              <a class="btn btn-primary" name="{{ sub_order.id }}" href="{{ url_for('order.work_command',sub_order_id=sub_order.id,url=request.url) }}">
+                <i class="icon-wrench icon-white"></i>&nbsp;{{ "质检检货" if sub_order.returned else "预排产" }}
+              </a>
+            {% elif not obj.refined or not obj.dispatched %}
+              <em>未下发</em>
+            {% else %}
+              ---
+            {% endif %}
+          </td>
+        {% endif %}
+        <td>
+          <a href="{{ url_for("order.sub_order", id_=sub_order.id, url=request.url) }}">
+            {{ sub_order.id }}
+          </a>
+        </td>
+        <td>{{ sub_order.product.name }}</td>
+        <td>{{ sub_order.tech_req }}</td>
+        {% if not obj.measured_by_weight %}
+          <td>{{ sub_order.quantity }}</td>
+          <td>{{ sub_order.unit }}</td>
+          <td>{{ sub_order.spec }}</td>
+          <td>{{ sub_order.type }}</td>
+        {% endif %}
+        <td>{% if sub_order.due_time %}
+          {{ sub_order.due_time }}{% else %}
+          ----{% endif %}</td>
+        <td>{{ sub_order.weight }}</td>
+        <td>{{ sub_order.harbor.name }}</td>
+        <td>{% if sub_order.urgent %}是{% else %}
+          否{% endif %}</td>
+        <td>{% if sub_order.returned %}是{% else %}
+          否{% endif %}</td>
+        {% if permissions.SchedulerPermission.can() %}
+          <td {% if not sub_order.pre_work_command_list %}
+            class="text-error"
+          {% endif %} >
+            {{ sub_order.pre_work_command_list|length }}
+          </td>
+          <td
+              {% if not sub_order.remaining_quantity %} class="text-error" {% endif %} >
+            {{ sub_order.remaining_quantity }}({{ sub_order.unit }})
+          </td>
+        {% else %}
+          <td>{{ sub_order.delivered_weight }}</td>
+          <td>{{ sub_order.to_deliver_weight }}</td>
+        {% endif %}
+        <td>
+          {% if sub_order.pic_path %}
+            <ul class="thumbnails">
+              <li class="span2">
+                <a href="{{ sub_order.pic_url }}" class="fancybox thumbnail" rel="group" title="{{ sub_order.product.name }}">
+                  <img src="{{ sub_order.pic_url }}" class="bordered" alt="{{ sub_order.product.name }}"/>
+                </a>
+              </li>
+            </ul>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    <tr>
+      <th>总计</th>
+      {% if permissions.SchedulerPermission.can() %}
+        <td></td>
+      {% endif %}
+      <td></td>
+      <td></td>
+      {% if not obj.measured_by_weight %}
+        <td>{{ field_value|sum("quantity") }}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+      {% endif %}
+      <td></td>
+      <td>{{ field_value|sum("weight") }}</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      {% if permissions.SchedulerPermission.can() %}
+        <td></td>
+        <td>
+          {{ field_value|sum("remaining_quantity") }}
+        </td>
+      {% else %}
+        <td>{{ field_value|sum("delivered_weight") }}</td>
+        <td>{{ field_value|sum("to_deliver_weight") }}</td>
+      {% endif %}
+      <td></td>
+    </tr>
+    <tbody>
+  </table>
+{% endif %}

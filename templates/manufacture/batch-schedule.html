@@ -1,0 +1,128 @@
+{% extends "layout.html" %}
+{% block __data_browser__custom_external_block %}
+  <script type="text/javascript">
+    $(function () {
+      $("#department_id").change(function () {
+        update_procedure();
+      });
+      var departments = {{ department_list|tojson|safe }};
+
+      function update_procedure() {
+        $("#procedure_id").children("option[value!='']").remove();
+        var selected_department_id = $("#department_id").val();
+        for (i = 0; i < departments.length; ++i) {
+          if (departments[i].id == selected_department_id) {
+            var procedure_list = departments[i].procedure_list;
+            for (j = 0; j < procedure_list.length; ++j) {
+              $("#procedure_id").append("<option value=" + procedure_list[j].id + ">" + procedure_list[j].name + "</option>");
+            }
+          }
+        }
+        $("#procedure_id").select2({
+          width: "element",
+          placeholder: "请选择",
+          matcher: function (term, text) {
+            return pinyin.getCamelChars(text).toUpperCase().indexOf(term.toUpperCase()) >= 0;
+          }
+        });
+      }
+
+      update_procedure();
+    })
+
+  </script>
+{% endblock %}
+{% block body %}
+  <div class="container">
+    <legend>排产</legend>
+    <form class="form-horizontal" action="{{ url_for('manufacture.schedule') }}" method="POST">
+      <div class="control-group">
+        <label class="control-label"><strong>已选择的工单号</strong> </label>
+
+        <div class="controls">
+          <p class="padding">
+            {{ work_command_list|join(", ",attribute="id") }}
+          </p>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><strong>数量(单位:KG)</strong> </label>
+
+        <div class="controls">
+          <p class="padding">
+            {{ work_command_list|sum(attribute="org_weight") }}
+          </p>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="department_id" class="control-label"><strong>车间</strong>
+        </label>
+
+        <div class="controls">
+          <select size="1" name="department_id" id="department_id"
+                  required='required'>
+            {% for department in department_list %}
+              <option value="{{ department.id }}"
+                  {% if default_department_id and department.id == default_department_id %}
+                      selected="selected"
+                  {% endif %} >{{ department.name }}</option>
+            {% endfor %}
+          </select>
+          <span class="help-inline">
+              {% for grouper, list in work_command_list|groupby("default_department") %}
+                工单<em>{{ list|join(",", attribute="id") }}</em>的默认车间是
+                <em>{{ grouper }}</em>&nbsp;
+              {% endfor %}
+          </span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="tech_req" class="control-label"><strong>技术要求</strong></label>
+
+        <div class="controls">
+          <input size="10" name="tech_req" id="tech_req" type="text"/></div>
+      </div>
+      <div class="control-group">
+
+        <div class="controls">
+          <label for="urgent-input" class="checkbox">
+            <input name="urgent" id="urgent-input" type="checkbox"/><strong>加急</strong>
+          </label>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="procedure_id"><strong>工序</strong></label>
+
+        <div class="controls">
+          <select size="1" name="procedure_id" id="procedure_id">
+            <option selected="selected" disabled="disabled" value="">
+              保持现有工序
+            </option>
+          </select>
+           <span class="help-inline">
+               {% for grouper, list in work_command_list|groupby("procedure") %}
+                 工单<em>{{ list|join("," ,attribute="id") }}</em>的工序是
+                 <em>{{ grouper }}</em>&nbsp;
+               {% endfor %}
+           </span>
+        </div>
+      </div>
+      {% for work_command in  work_command_list %}
+        <input type="hidden" name="id" value="{{ work_command.id }}"/>
+      {% endfor %}
+      <input type="hidden" name="url" value="{{ request.args.get("url") or url_for("manufacture.work_command_list") }}"/>
+
+      <div class="control-group">
+        <div class="controls">
+          <button class="btn btn-large btn-primary">
+            <i class="icon-ok icon-white"></i>&nbsp;保存
+          </button>
+          <a class="btn btn-large" href="{{ request.args.get("url") or url_for("manufacture.work_command_list") }}">
+            <i class="icon-backward"></i>&nbsp;返回
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>
+
+{% endblock %}

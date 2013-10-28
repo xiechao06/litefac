@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="ym-wrapper">
+        <div class="ym-wbox">
+            <form action="{{ url_for('op_page.export2csv') }}" method="POST">
+                生产日期在<input type="date" name="begin_date">与
+                <input type="date" name="end_date">之间的订单
+                <br/>
+                <button class="ym-button">导出表格</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "admin2/object.html" %}
+
+{% block __data_browser__customized_head_block %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/md5-min.js') }}" ></script>
+<script type="text/javascript">
+  $(function () {
+      $("#md5-modal .alert-error").hide(); 
+      $("#md5-modal").on('shown', function () {
+        $('input[name="raw_password"]').focus();
+        });
+      $("#password").focus(function () {
+        $("#md5-modal").modal("show");
+        });
+      $("#password").click(function () {
+        $("#md5-modal").modal("show");
+        });
+      $('input[name="raw_password"]').keydown(function (event) {
+        $("#md5-modal .alert-error").hide(); 
+        if (event.which == 13) {
+          $("#md5-ok").click();
+        }
+        });
+      $("#md5-ok").click(function () {
+        var raw_password = $('input[name="raw_password"]').val();
+        if (raw_password.length == 0) {
+          $("#md5-modal .alert-error").show(); 
+          $("#password").focus();
+          return;
+        }
+        $("#md5-modal").modal("hide");
+        $("#password").val(hex_md5(raw_password));
+        });
+    });
+</script>
+
+{% endblock %}
+
+{% block body %}
+{{super()}}
+<div id="md5-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h3>md5密码生成器</h3>
+  </div>
+  <div class="modal-body text-center form-horizontal">
+    <div class="alert alert-error">
+      密码不能为空!
+    </div>
+    <div class="control-group">
+      <div class="control-label">
+        <label for="">请输入密码</label>
+      </div>
+      <div class="controls">
+        <input type="text" name="raw_password" autofocus="autofocus" />
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" id="md5-ok" >确认</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+{% endblock %}

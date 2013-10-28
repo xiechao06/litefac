@@ -1,0 +1,25 @@
+{% set total_weight = field_value|sum("processed_weight") %}
+{% if field_value|length %}
+  <a href="#modal_{{ obj.id }}_wcl" role="button" data-toggle="modal">{{ total_weight }}</a>
+  <div class="modal hide fade" id="modal_{{ obj.id }}_wcl" tabindex="-1">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3>订单{{ obj.customer_order_number }}的待质检工单列表</h3>
+    </div>
+    <div class="modal-body">
+      <ul>
+        {% for entry in field_value %}
+          <li>
+            工单编号{{ entry.id }}，生产重量{{ entry.processed_weight }}公斤{% if not entry.sub_order.measured_by_weight %}，数量
+            {{ entry.org_cnt }}（{{ entry.unit }}）{% endif %}，生产班组<em>{{ entry.team or "无"}}</em>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="modal-footer">
+      <a class="btn" href="#" data-dismiss="modal">关闭</a>
+    </div>
+  </div>
+{% else %}
+  无
+{% endif %}

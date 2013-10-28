@@ -1,0 +1,84 @@
+<div id="new-consignment-dialog" class="modal hide fade" tabindex="-1">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">&times;</a>
+
+    <h3>{{ _("创建发货单") }}</h3>
+  </div>
+  <form class="modal-form" action="{{ url_for("delivery.consignment") }}" method="POST">
+    <div class="modal-body" id="new-consignment-content">
+      <fieldset>
+        <div class="control-group">
+          <label for="customer" class="control-label">
+            <strong>请选择公司名称</strong>
+            <span class="text-error" title="请选择公司名称.">*</span>
+          </label>
+
+          <div class="controls">
+            <select name="customer" id="customer" required="required">
+            </select>
+          </div>
+        </div>
+        <div class="control-group">
+          <label for="pay_mode">
+            <strong>请选择支付类型</strong>
+            <span class="text-error" title="请选择支付类型.">*</span>
+          </label>
+
+          <div class="controls">
+            <select name="pay_mod" id="pay_mode" required="required">
+              <option value="0">月结</option>
+              <option value="1">现金支付</option>
+            </select></div>
+        </div>
+      </fieldset>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary hide" id="consignment-button">
+        提交
+      </button>
+      <a class="btn" data-dismiss="modal">
+        返回
+      </a>
+    </div>
+    <input type="hidden" id="delivery_session_id" name="delivery_session_id" value=""/>
+  </form>
+</div>
+<script type="text/javascript">
+  $(function () {
+    var temp = "";
+    $("#new-consignment-dialog").modal({show: false});
+    $("#new-consignment-dialog").on("show", function () {
+      {% if delivery_session %}
+        var id = "{{ delivery_session.id }}";
+      {% else %}
+        var id = $("input[type='radio']:checked").val();
+      {% endif %}
+
+      if (jQuery.type(id) == "undefined" || id == "") {
+        temp = $("#new-consignment-content").html();
+        $("#new-consignment-content").html('<p class="text-error">' + "当前无记录" + '</p>');
+        $("#consignment-button").addClass("hide");
+        return;
+      }
+      $("#delivery_session_id").val(id);
+      $.getJSON("/delivery/ajax/customer-list?delivery_session_id=" + id,
+          function (data) {
+            $("#customer").empty();
+            $.each(data, function (idx, v) {
+              $("#customer").append("<option value=" + v.id + ">" + v.name + "</option>");
+              $("#consignment-button").removeClass("hide");
+              $("#customer").select2({width: "resolve"});
+            });
+          }).error(function (data) {
+            temp = $("#new-consignment-content").html();
+            $("#new-consignment-content").html('<p class="text-error">' + data.responseText + '</p>');
+            $("consignment-button").addClass("hide");
+          });
+    });
+    $("#new-consignment-dialog").on("hidden", function () {
+      if (temp != "") {
+        $("#new-consignment-content").html(temp);
+      }
+    });
+  });
+</script>

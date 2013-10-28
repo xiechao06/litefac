@@ -1,0 +1,45 @@
+<script type="text/javascript">
+  $(function () {
+      var tree = {{ field_value|tojson|safe }};
+      var canvas = document.getElementById('work-flow-canvas');
+      var workFlowRepr = new WorkFlowRepr(canvas, tree, 2);
+      workFlowRepr.draw();
+    });
+</script>
+
+<a data-toggle='modal' href="#help-modal" class="icon-question-sign pull-right work-flow-help" ></a>
+<div class="modal fade hide" id="help-modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">流程图说明</h4>
+      </div>
+      <div class="modal-body">
+        <p>本图涉及到收货单，订单，子订单，工单，仓单等对象，以及这些对象的创建关系。</p>
+        <p>从上到下罗列了上述类型对象（用虚线标识）。每条虚线，标记了针对这些对象的事件，这些事件连接起来，称为对象的<strong>生命线</strong> 。其次，若对象质检有创建关系，会有竖直线段（命名为<strong>分支</strong>）从一个对象指向另外一个对象。系统特地为每个对象设置了不同的颜色用于生成生命线以及分支。本图存在如下的创建关系：</p> 
+        <ul>
+          <li>收货单和对应的订单</li>
+          <li>订单和包含的子订单</li>
+          <li>只有子订单预排产生成的工单，认为是子订单生成的</li>
+          <li>工单结转后生成的工单，认为是由被结转的工单生成的</li>
+          <li>工单质检结果是 返镀， 返修， 转下道工序，那么新生成的工单认为是由被质检工单生成的</li>
+          <li>工单结束后生成的仓单，认为是由工单生成的。</li>
+          <li>仓单没有发货完成的情况下，会新生成一个完成的仓单，这个仓单认为是由原来的仓单生成的。</li>
+        </ul>
+        <p>另外该图还提供了如下互动：</p>
+        <ul>
+          <li>鼠标挪到对象名称和生命线上时，会显示对象的详细信息。</li>
+          <li>鼠标挪到事件上时，会显示时间的详细信息。</li>
+          <li>鼠标点击对象名称或者生命线，会进入对象的详情页。</li>
+          <li>有的时候，事件会叠加在一起，这个时候，可以选择不展示该对象（虚线最左侧的勾选栏）或所有对象的事件描述。</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss='modal'>{{ _('Close') }}</a>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div id="work-flow-canvas">
+</div>

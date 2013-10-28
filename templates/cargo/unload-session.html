@@ -1,0 +1,75 @@
+{% extends "__data_browser__/form.html" %}
+{% block __data_browser__custom_external_block %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static',filename="js/fancybox/source/jquery.fancybox.css") }}" type="text/css" media="screen">
+  <script type="text/javascript" src="{{ url_for('static',filename="js/fancybox/source/jquery.fancybox.pack.js") }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',filename="js/spin.min.js") }}"></script>
+  <script src="{{ url_for('__data_browser__.static', filename='js/sprintf-0.6.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',filename="js/jquery.spin.js") }}"></script>
+  <script type="text/javascript">
+    $(function () {
+      $(".fancybox").fancybox();
+      $(".collapse[data-role=gr-entries]").on('shown',function (event) {
+        event.stopPropagation();
+        $(this).prev().attr("class", "icon-chevron-up");
+      }).on('hidden', function (event) {
+            event.stopPropagation();
+            $(this).prev().attr("class", "icon-chevron-down");
+          });
+      $("#log-accordion").find("a").click(function () {
+        var e = $("#log-list").find(".accordion-inner ul");
+        if (e.children().size() > 0) {
+          return true;
+        }
+        var opts = {
+          lines: 11, // The number of lines to draw
+          length: 19, // The length of each line
+          width: 7, // The line thickness
+          radius: 28, // The radius of the inner circle
+          corners: 0.9, // Corner roundness (0..1)
+          rotate: 10, // The rotation offset
+          direction: 1, // 1: clockwise, -1: counterclockwise
+          color: '#000', // #rgb or #rrggbb
+          speed: 0.7, // Rounds per second
+          trail: 56, // Afterglow percentage
+          shadow: false, // Whether to render a shadow
+          hwaccel: false, // Whether to use hardware acceleration
+          className: 'spinner', // The CSS class to assign to the spinner
+          zIndex: 2e9, // The z-index (defaults to 2000000000)
+          top: '1', // Top position relative to parent in px
+          left: 'auto' // Left position relative to parent in px
+        };
+        var spinner = new Spinner(opts).spin(document.getElementById("log-list"));
+        $.getJSON("{{ url_for("cargo.us_log_list", us_id=obj.id) }}", function (data) {
+          if (data["count"] == 0) {
+            e.append("<li>没有日志</li>")
+          } else {
+            $.each(data["data"], function (idx, log) {
+              var s = "";
+              if (log.action == "新建") {
+                s = sprintf("[%s]: 用户%s创建了本收货单", log.create_time, log.actor);
+              } else {
+                s = sprintf("[%s]: 用户%s对<i>%s</i>(%s)执行了[%s]操作", log.create_time, log.actor, log.obj_cls, log.obj, log.action);
+              }
+              if (log.message.length > 0) {
+                s += " - " + log.message;
+              }
+              e.append("<li>" + s + "</li>");
+            });
+          }
+          spinner.spin();
+        });
+        return true;
+      });
+    });
+  </script>
+{% endblock %}
+{% block body %}
+  {% if obj.goods_receipt_stale %}
+    <div class="alert alert-warning container">
+      <h3>警告</h3>
+      由于您修改过卸货会话，有收货单已经过时，请重新生成!
+    </div>
+  {% endif %}
+  {{ super() }}
+{% endblock %}

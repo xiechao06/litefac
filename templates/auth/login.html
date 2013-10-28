@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block __data_browser__nav_bar_block %}
+
+{% endblock %}
+
+{% block __data_browser__customized_head_block %}
+  {{ super() }}
+  <script type="text/javascript">
+    $(function () {
+      $(window).resize(function () {
+        $(".input-prepend, .input-append").each(function (index, group) {
+          var input = $("input", group).css('width', '');
+          var width = $(this).width();
+          $(".add-on, .btn", group).each(function () {
+            width -= $(this).outerWidth();
+          });
+          input.css("width", width);
+        });
+      }).trigger('resize');
+    })
+  </script>
+{% endblock %}
+
+{% block body %}
+  <div class="container">
+
+    <form action="{{ url_for("auth.login") }}" class="alert alert-info form-horizontal form-signin" method="POST">
+
+      <div class="control-group">
+        <div class="controls"><h4>请登录:</h4></div>
+      </div>
+
+      {% if error %}
+        <div class="control-group">
+          <div class="alert alert-error controls">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ error }}
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="control-group">
+        <div class="controls">
+            <div class="input-prepend input-block-level">
+              <span class="add-on"><i class="icon-user"></i></span>
+              <input type="text" name="username" id="username" required="required" placeholder="用户名" class="input-block-level"/>
+            </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+            <div class="input-prepend input-block-level">
+              <span class="add-on"><i class="icon-key"></i></span>
+              <input type="password" name="password" id="password" required="required" placeholder="密码" class="input-block-level"/>
+            </div>
+        </div>
+      </div>
+      <hr>
+      <div class="control-group">
+        <div class="controls">
+          <button class="btn btn-block btn-large btn-success">
+            <i class="icon-signin"></i>&nbsp;登录
+          </button>
+        </div>
+      </div>
+      {% if next_url %}
+        <input type="hidden" name="next_url" value="{{ next_url }}">
+      {% endif %}
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,273 @@
+{% extends "__data_browser__/base_layout.html" %}
+
+{% block __data_browser__title_block %}
+  {{ titlename }} - 金禾域生产管理系统
+{% endblock %}
+
+{% block __data_browser__customized_head_block %}
+  <script src="{{ url_for('static', filename='select2/select2_locale_zh-CN.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename="css/customer.css") }}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename="css/opentip.css") }}"/>
+  {% if g.request_from_mobile %}
+    <script type="text/javascript" src="{{ url_for("static", filename="js/cordova-2.5.0.js") }}"></script>
+  {% endif %}
+  <script type="text/javascript" src="{{ url_for("static", filename="js/JSPinYin.js") }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/svg.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/svg.foreignobject.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/work-flow-repr.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/opentip-jquery.min.js') }}"></script>
+  <script type="text/javascript">
+    {% if g.request_from_mobile %}
+      var pictureSource;
+      var destinationType;
+      function onLoad() {
+        document.addEventListener("deviceready", onDeviceReady, false);
+      }
+      window.onload = onLoad();
+
+      function exitApp() {
+        function onConfirm(buttonIndex) {
+          if (buttonIndex == 1) {
+            navigator.app.exitApp();
+          }
+        }
+
+        navigator.notification.confirm("{{ _("确认退出吗?") }}", onConfirm, "退出?", "退出,取消");
+      }
+
+      function onBackKeyDown() {
+        if (window.location.pathname.lastIndexOf("-list") >= 0) {
+          exitApp()
+        } else {
+          navigator.app.backHistory();
+        }
+      }
+      function onDeviceReady() {
+        document.addEventListener("menubutton", onMenuKeyDown, false);
+        document.addEventListener("backbutton", onBackKeyDown, false);
+        pictureSource = navigator.camera.PictureSourceType;
+        destinationType = navigator.camera.DestinationType;
+      }
+
+      function onMenuKeyDown() {
+        $(".context-menu").toggle();
+      }
+
+      function onPhotoURISuccess(imageData) {
+        var largeImage = document.getElementById('largeImage');
+        //largeImage.style.display = 'block';
+        largeImage.src = imageData;
+        $("[name=pic_url]").val(imageData);
+      }
+
+      function capturePhoto() {
+        navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
+          destinationType: destinationType.FILE_URI});
+      }
+
+      function onFail(message) {
+        alert('Failed because: ' + message);
+      }
+
+      $(function () {
+        $(".context-menu").hide();
+        $(".context-menu .refresh-btn").click(function (e) {
+          location.reload();
+          return false;
+        });
+        $(".context-menu .exit-btn").click(function () {
+          exitApp()
+        });
+      });
+    {% endif %}
+    $(function () {
+
+      setTimeout(function () {
+        $(".flash").fadeOut("slow")
+      }, 3000);
+      function my_matcher(term, text) {
+        return pinyin.getCamelChars(text).toUpperCase().indexOf(term.toUpperCase()) >= 0;
+      }
+
+      if ($("select").data("select2") == undefined || $("select").data("select2") == null) {
+        $("select").select2({
+          width: "element",
+          placeholder: "请选择",
+          matcher: my_matcher
+        });
+      } else {
+        $("select").each(function () {
+          $(this).data("select2").opts.placeholder = "请选择";
+          $(this).data("select2").opts.matcher = my_matcher;
+        });
+      }
+      $("[data-toggle=tooltip]").tooltip();
+      // 展示代办事项
+      $.pnotify.defaults.history = false;
+      var stack_bottomright = {"dir1": "up", "dir2": "left", "firstpos1": 25, "firstpos2": 25};
+
+      function display(message) {
+        var ret = message["msg"];
+        if (message.context_url.length > 0) {
+          var url = message.context_url;
+          if (url.indexOf("?") == -1) {
+            url += "?url=" + "{{ request.url|urlencode }}";
+          } else {
+            url += "&url=" + "{{ request.url|urlencode }}";
+          }
+
+          ret += sprintf('<a href="%s">开始&gt;&gt;</a>', url)
+        }
+        return ret;
+      }
+
+      function f() {
+        $.getJSON('{{ url_for("ajax_new_message") }}', function (data) {
+          var messages = data["messages"];
+          for (var i = 0; i < messages.length; i++) {
+            $.pnotify({
+              title: '新待办事项',
+              text: display(messages[i]),
+              addclass: "stack-bottomright",
+              stack: stack_bottomright
+            });
+          }
+          var e = $('header a[href="/todo/todo-list"]');
+          if (e.html() != undefined) {
+            e.html(e.html().replace(/待办事项(\(\d+\))?/, "待办事项(" + data["total_cnt"] + ")"));
+          }
+          setTimeout(f, 30000);
+        })
+      };
+      {% if current_user.is_authenticated()%}
+        f();
+      {% endif %}
+    })
+  </script>
+  <style type="text/css">
+    .stack-bottomright {
+      /* These are just CSS default values to reset the pnotify CSS. */
+      right: auto;
+      top: auto;
+    }
+  </style>
+{% endblock %}
+
+{% block __data_browser__nav_bar_block %}
+  <header class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      {% if g.request_from_mobile %}
+        <div class="brand">
+          LITE-MMS
+          <small><i>- {{ titlename }}</i></small>
+        </div>
+        {% if current_user.is_authenticated() and nav_bar %}
+          <a href="#" class="btn btn-navbar">
+            <i class="icon-search nav-text"></i>
+          </a>
+          <button class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse" type="button">
+            <i class="icon-reorder"></i>
+          </button>
+          <nav class="nav-collapse">
+            {{ nav_bar.as_ul("active")|safe }}
+            <ul class="nav">
+              <li>
+                <a href="{{ url_for('auth.logout') }}" class="navbar-text">
+                  <i class="icon-off icon-large"></i>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        {% endif %}
+      {% else %}
+        <div class="brand">
+          LITE-MMS
+        </div>
+        {% if current_user.is_authenticated() and nav_bar is defined %}
+          <button class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse" type="button">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <nav class="nav-collapse">
+            {{ nav_bar.as_ul("active", grouped=True)|safe }}
+            <form class="navbar-search pull-right form-search"
+                  action="{{ url_for('search.search') }}" method="GET">
+              <div class="input-append">
+                <input class="search-query span2" type="text"
+                       placeholder="关键词..." name="content"
+                       {% if keywords %}value="{{ keywords }}"{% endif %}/>
+                <button class="btn btn-inverse">搜索</button>
+              </div>
+            </form>
+            <bold class="navbar-text pull-right">
+              欢迎
+              <mark><strong>{{ current_user.username }}</strong>
+              </mark>
+              您是
+              <strong>
+                {% if current_user.groups|length > 1 %}
+                  <a href="#switch-group-modal" data-role="switch-group" data-toggle="modal">
+                {% endif %}
+                {{ current_user.group_name }}
+                {% if current_user.groups|length > 1 %}
+                  </a>
+                {% endif %}
+              </strong>
+              <a href="{{ url_for('auth.logout') }}">退出</a>
+            </bold>
+          </nav>
+        {% endif %}
+      {% endif %}
+    </div>
+  </header>
+  <div id="switch-group-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="myModalLabel">切换角色</h3>
+    </div>
+    <div class="modal-body">
+      <ul class="nav nav-pills nav-stacked">
+        {% for group in current_user.groups %}
+          {% if group.id == current_user.group.id %}
+            <li class='active pagination-centered'>
+              <a href='#'><b>{{ group.name }} (当前角色)</b></a>
+            </li>
+          {% else %}
+            <li class='pagination-centered'>
+              <a href="{{ url_for('auth.switch_group', id_=group.id) }}"><b>{{ group.name }}</b></a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    </div>
+  </div>
+{% endblock %}
+
+{% block __data_browser__footer_block %}
+  <footer class="footer hidden-phone">
+    <div class="container">
+      <div class="muted">
+        copyright@ LITE-MMS
+      </div>
+    </div>
+  </footer>
+  {% if g.request_from_mobile %}
+    <div class="context-menu collapse in navbar-fixed-bottom">
+      <div class="btn-group">
+        <button class="btn-large refresh-btn">
+          <i class="icon-refresh"></i>
+          <span>刷新</span>
+        </button>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-large exit-btn">
+          <i class="icon-home"></i>&nbsp;退出
+        </button>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

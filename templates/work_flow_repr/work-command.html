@@ -1,0 +1,30 @@
+<p>
+  <strong>状态</strong> - {{ work_command.status_name }}
+</p>
+<p>
+  <strong>产生原因</strong> - {{ work_command.cause_name}}
+</p>
+<p>
+  <strong>工序前重量</strong> - {{ work_command.org_weight }}(公斤)
+</p>
+<p>
+  <strong>工序前数量</strong> - {{ work_command.org_quantity}}{% if work_command.unit %}({{ work_command.unit }}){% endif %}
+</p>
+<p>
+  <strong>工序后重量</strong> - {{ '--' if work_command.processed_weight is none else work_command.processed_weight }}(公斤)
+</p>
+<p>
+  <strong>工序后数量</strong> - {{ '--' if work_command.processed_quantity is none else work_command.processed_quantity }}{% if work_command.unit %}({{ work_command.unit }}){% endif %}
+</p>
+<p>
+  <strong>技术要求</strong> - {{ work_command.tech_req }}
+</p>
+<p>
+  <strong>车间</strong> - {{ '--' if work_command.department is none else work_command.deparment }}
+</p>
+<p>
+  <strong>班组</strong> - {{ '--'  if work_command.team is none else work_command.team }}
+</p>
+<p>
+  <strong>质检员</strong> - {{ '--' if work_command.qi is none else work_command.qi }}
+</p>

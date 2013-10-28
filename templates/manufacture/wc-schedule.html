@@ -1,0 +1,32 @@
+{% extends "__data_browser__/form.html" %}
+{% block __data_browser__customized_head_block %}
+  {{ super() }}
+  <script type="text/javascript">
+    $(function () {
+      var departments = {{ department_list|tojson|safe }};
+
+      $("#department").on("change", function () {
+        $("#procedure").empty();
+        if ($(this).val() in departments) {
+          $.each(departments[$(this).val()], function (index, value) {
+            $("#procedure").append($("<option>", {value: value.id, text: value.text}))
+          });
+          $("#procedure").select2({
+            width: "resolve",
+            placeholder: "请选择",
+            matcher: function (term, text) {
+              return pinyin.getCamelChars(text).toUpperCase().indexOf(term.toUpperCase()) >= 0;
+            }
+          });
+        }
+      });
+
+      $("form").submit(function(){
+        if(!($("#department").val() in departments)){
+          alert("请选择车间！");
+          return false;
+        }
+      });
+    })
+  </script>
+{% endblock %}

@@ -1,0 +1,168 @@
+{% extends "layout.html" %}
+{% block __data_browser__custom_external_block %}
+  <script type="text/javascript">
+    $(function () {
+
+      $('#status').change(function () {
+        $("#work_command_list_form").submit();
+      });
+      $('#harbor').change(function () {
+        $("#work_command_list_form").submit();
+      });
+
+      $("#schedule-button").click(function () {
+        var id = $("input[name='work_command_id']:checked").val();
+        if (jQuery.type(id) == "undefined") {
+          alert("请选择记录");
+          return false;
+        } else {
+          $(this).attr("disable", true);
+          $("#work_command_form").attr("method", "GET");
+          $("#work_command_form").attr("action", "{{ url_for('manufacture.schedule') }}");
+          $("#work_command_form").submit();
+        }
+      });
+      $("#retrieve-button").click(function () {
+        var id = $("input[name='work_command_id']:checked").val();
+        if (jQuery.type(id) == "undefined") {
+          alert("请选择记录");
+          return;
+        } else {
+          $(this).attr("disable", true);
+          $("#work_command_form").attr("action", "{{ url_for('manufacture.retrieve') }}");
+          $("#work_command_form").submit();
+        }
+      });
+      $("input[name='check_all']").click(function () {
+        $("input[name='work_command_id']").attr("checked", this.checked)
+      });
+      {% if not permissions.work_command.schedule_work_command.can() %}
+        $("input").attr("disabled", "disabled");
+      {% endif %}
+    });
+  </script>
+{% endblock %}
+{% block body %}
+  <div class="container">
+    <form class="form-inline" action="{{ url_for('manufacture.work_command_list') }}" id="work_command_list_form">
+      {% if request.args.get("order_id") %}
+        <input type="hidden" name="order_id" value="{{ request.args.get("order_id") }}">
+        <input type="hidden" name="url" value="{{ request.args.get("url") or "/" }}">
+      {% endif %}
+      <div class="span2">
+        <label for="status" class="padding">状态</label>
+        <select name="status" id="status" required="required" class="input-small">
+          {% for status in status_list %}
+            <option value="{{ status[0] }}" title="{{ status[2] }}"
+                {% if status[0] == request.args.get("status")|int %}
+                    selected="selected"
+                {% endif %} >{{ status[1] }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label for="harbor" class="padding">卸货点</label>
+        <select name="harbor" id="harbor">
+          <option value="全部">全部</option>
+          {% for harbor in harbor_list %}
+            <option value="{{ harbor.name }}"
+                {% if harbor.name == request.args.get("harbor") %}
+                    selected="selected"
+                {% endif %} >{{ harbor.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </form>
+    <legend>工单列表</legend>
+    <form method="POST" id="work_command_form">
+      <table class="table table-striped table-bordered table-condensed">
+        <thead>
+        <tr>
+          <th><input type="checkbox" name="check_all"></th>
+          <th>工单号</th>
+          <th>子订单号</th>
+          <th>订单编号</th>
+          <th>产品名称</th>
+          <th>重量(KG)</th>
+          <th>数量</th>
+          <th>客户名称</th>
+          <th>卸货点</th>
+          <th>是否加急</th>
+          <th>工序</th>
+          <th>上道工序</th>
+          <th>状态</th>
+          <th>车间</th>
+          <th>班组</th>
+          <th>处理类型</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for work_command in work_command_list %}
+          <tr {% if work_command.status == 8 %}
+            class="warning" title="车间主任打回" {% endif %} >
+            <td>
+              <input type="checkbox" value="{{ work_command.id }}"
+                     name="work_command_id"/>
+            </td>
+            <td>
+              <a href="{{ url_for("manufacture.work_command", id_=work_command.id, url=request.url) }}">{{ work_command.id }}</a>
+            </td>
+            <td>{{ work_command.sub_order_id }}</td>
+            <td>{{ work_command.sub_order.order.customer_order_number }}</td>
+            <td>{{ work_command.sub_order.product.name }}</td>
+            <td>{{ work_command.org_weight }}</td>
+            <td>{{ work_command.org_cnt }}({{ work_command.unit }})
+            </td>
+            <td>{{ work_command.order.customer.name }}</td>
+            <td>{{ work_command.harbor.name }}</td>
+            {% if work_command.urgent %}
+              <td class="text-error">是
+                {% else %}
+              <td>否
+            {% endif %}
+            </td>
+            <td>{{ work_command.procedure.name }}</td>
+            <td>{{ work_command.previous_procedure.name }}</td>
+            <td title="{{ work_command.status_describe }}">{{ work_command.status_name }}</td>
+            <td>{% if work_command.department %}
+              {{ work_command.department.name }}
+            {% endif %}</td>
+            <td>
+              {% if work_command.team %}
+                {{ work_command.team.name }}
+              {% endif %}
+            </td>
+            <td>{{ work_command.handle_type_name }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+
+      {% from "pagination.html" import render_pagination %}
+      {{ render_pagination(pagination) }}
+      <input type="hidden" name="url" value="{{ request.url }}">
+
+      <div class="control-group">
+        <div class="controls">
+          {% if permissions.work_command.schedule_work_command.can() %}
+            {% if schedule %}
+              <button class="btn btn-large btn-primary" id="schedule-button" type="button">
+                <i class="icon-wrench icon-white"></i>&nbsp;排产
+              </button>
+            {% endif %}
+            {% if retrieve %}
+              <button class="btn btn-large btn-warning" id="retrieve-button" type="button">
+                <i class="icon-repeat icon-white"></i>&nbsp;回收
+              </button>
+            {% endif %}
+          {% endif %}
+          {% if request.args.get("order_id") %}
+            <a class="btn btn-large" href="{{ request.args.get("url") or "/" }}">
+              返回
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}

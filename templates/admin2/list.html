@@ -1,0 +1,53 @@
+{% extends "__data_browser__/list.html" %}
+
+{% block __data_browser__hint_block %}
+  {% if hint_message %}
+  <div class="alert alert-info">
+    * {{ hint_message }}
+  </div>
+  {% endif %}
+{% endblock %}
+
+{% block __data_browser__custom_external_block %}
+<script type="text/javascript">
+  $(function () {
+      $("#main-form").attr("class", "span8")
+      });
+</script>
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span2">
+      <div class="well">
+        <ul class="nav nav-list">
+          {% for group in sub_nav_bar.groups %}
+            <li class="muted"><h5>{{group.name}}</h5></li>
+            {% for nav_link in group.nav_links %}
+              {% if nav_link.enabler() %}
+              <li class="active text-center">
+                <a href="{{nav_link.url}}" ><strong>{{nav_link.anchor}}</strong></a>
+              </li>
+              {% else %}
+                <li class="text-center">
+                  <a href="{{nav_link.url}}">{{nav_link.anchor}}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    {% block lists %} 
+      {{ super() }}
+    {% endblock %}
+    <div class="span2">
+      {% block filters %} 
+        {{ super() }}
+      {% endblock %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+

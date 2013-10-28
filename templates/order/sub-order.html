@@ -1,0 +1,9 @@
+{% extends "__data_browser__/form.html" %}
+{% block __data_browser__custom_external_block %}
+  {{ super() }}
+  <script type="text/javascript">
+  $(function(){
+    $("#due_time").datetimepicker('setStartDate', new Date().toJSON().substr(0,10));
+  });
+  </script>
+{% endblock %}

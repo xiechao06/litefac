@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="container">
+        <div class="ym-wbox">
+            <div class="ym-form">
+                <div class="ym-fbox-text">
+                    <label><span>工单号</span></label>{{ work_command.id }}
+                </div>
+                <table class="bordertable">
+                    <tr>
+                        <th>产品名称</th>
+                        <th>质检数量</th>
+                        <th>质检结果</th>
+                        <th>产品图片</th>
+                    </tr>
+                    {% for qir in qir_list %}
+                        <tr>
+                            <td>{{ work_command.sub_order.product.name }}</td>
+                            <td>{{ qir.quantity }}({{ work_command.unit }})</td>
+                            <td>{% for result in qir_result_list %}
+                                {% if result[0] == qir.result %}{{ result[1] }}
+                                {% endif %}{% endfor %}</td>
+                            <td>{{ qir.pir_url }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+              <a class="ym-button ym-delete" href="{{ request.headers.get("referer", "/") }}">返回</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

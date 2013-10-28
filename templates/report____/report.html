@@ -1,0 +1,29 @@
+{% extends "report____/base-report.html" %}
+{% block report____custom_external_block %}
+  {{ super() }}
+  <script type="text/javascript" src='{{ url_for("static", filename="js/jquery-printarea.js") }}'></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#print-area").bind("click", function () {
+            $($("#drill-down-detail").find('.modal-body p')).printArea();
+          }
+      )
+    });
+  </script>
+{% endblock %}
+
+{% block drill_down %}
+  <div id="drill-down-detail" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <h3></h3>
+    </div>
+    <div class="modal-body">
+      <p class="pagination-centered">
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Close') }}</button>
+      <button class="btn btn-primary" id="print-area">打印</button>
+    </div>
+  </div>
+{% endblock %}

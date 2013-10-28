@@ -1,0 +1,24 @@
+<p>
+<strong>产品</strong> - {{sub_order.product.name}}
+</p>
+<p>
+<strong>规格</strong> - {{ sub_order.spec}}
+</p>
+<p>
+<strong>型号</strong> - {{ sub_order.type}}
+</p>
+<p>
+<strong>技术要求</strong> - {{ sub_order.tech_req}}
+</p>
+<p>
+<strong>净重</strong> - {{ sub_order.weight }}
+</p>
+<p>
+<strong>加急</strong> - {{ '是' if sub_order.urgent else '否' }}
+</p>
+<p>
+<strong>退货</strong> - {{ '是' if sub_order.urgent else '否' }}
+</p>
+<p>
+<strong>待预排产重量</strong> - {{ sub_order.remaining_weight }}
+</p>

@@ -1,0 +1,184 @@
+{% extends "layout.html" %}
+{% block __data_browser__custom_external_block %}
+  {{ super() }}
+  <script type="text/javascript">
+    function my_matcher(term, text) {
+      return pinyin.getCamelChars(text).toUpperCase().indexOf(term.toUpperCase()) >= 0;
+    }
+    function calc_unit_weight() {
+      var weight = $("input[name='weight']").val();
+      var quantity = $("input[name='quantity']").val();
+      if (weight.length && quantity != undefined && quantity.length) {
+        return weight / quantity;
+      } else {
+        return null;
+      }
+    }
+
+    function update_unit_weight() {
+      var unit_weight = calc_unit_weight();
+      var message = "({{ _("单位重量: ") }}";
+      if (unit_weight != null) {
+        message += unit_weight + " 公斤)";
+        $("#unit_weight").text(message);
+        $("#unit_weight").show();
+      } else {
+        $("#unit_weight").hide();
+      }
+    }
+
+    $(function () {
+      var products = {{ products|safe }};
+      var selected_product_type = $("#product_type").val();
+      $.each(products[selected_product_type], function (idx, entry) {
+        $("#product").append('<option value="' + entry.id + '">' + entry.name + '</option>');
+        $("#product").select2({width: "resolve", matcher: my_matcher});
+      });
+      $("#product_type").change(function (ui) {
+        var selected_product_type = $("#product_type").val();
+        $("#product").empty();
+        $.each(products[selected_product_type], function (idx, entry) {
+          $("#product").append("<option value=" + entry.id + ">" + entry.name + "</option>");
+        });
+        $("#product").select2({width: "resolve", matcher: my_matcher});
+      });
+
+      $("input[name='weight']").focusout(update_unit_weight);
+      $("input[name='quantity']").focusout(update_unit_weight);
+      update_unit_weight();
+      $("input[name='due_time']").attr("min", new Date().toJSON().substr(0, 10));
+      $("form").submit(function () {
+        if ($("#product").text().trim() == "{{ DEFAULT_PRODUCT_NAME }}" || $("#product-type").text().trim() == "{{ DEFAULT_PRODUCT_NAME }}") {
+          alert("产品及产品类型不能选择为默认加工件");
+          return false;
+        }
+        if ($("#due_time").val() == "") {
+          alert("交易时间不能为空");
+          return false;
+        }
+      });
+    });
+  </script>
+{% endblock %}
+{% block body %}
+  <div class="container">
+    <p class="text-info">
+      {{ _("本订单收货重量为") }}: {{ order.goods_receipt.goods_receipt_entries|sum(attribute="weight") }}公斤,
+      {{ _("已创建子订单合计重量为") }}: {{ order.sub_order_list|sum(attribute="weight") }}公斤
+    </p>
+
+    <form class="form-horizontal" action="{{ url_for('order.new_sub_order') }}" method="POST">
+      <div class="control-group">
+        <label class="control-label" for="product_type"><strong>产品类型</strong>&nbsp;<span class="required">*</span></label>
+
+        <div class="controls">
+          <select id="product_type" name="product_type" required="required">
+            {% for t in product_types %}
+              <option value="{{ t.id }}">
+                {{ t.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="product"><strong>产品名称</strong>&nbsp;<span class="required">*</span></label>
+
+        <div class="controls">
+          <select name="product" id="product" required="required">
+          </select>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="tech_req"><strong>技术要求</strong></label>
+
+        <div class="controls">
+          <input name="tech_req" size="10" type="text" id="tech_req"/>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="due_time"><strong>交货日期</strong>&nbsp;<span class="required">*</span></label>
+
+        <div class="controls">
+          <input name="due_time" id="due_time" type="date" required="required"/>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="weight"><strong>净重(KG)</strong>&nbsp;<span class="required">*</span></label>
+
+        <div class="controls">
+          <input name="weight" type="number" required="required" id="weight"/>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><strong>规格</strong></label>
+
+        <div class="controls">
+          <input type="text" name="spec" id="spec">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><strong>型号</strong></label>
+
+        <div class="controls">
+          <input type="text" name="type" id="type">
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="quantity" class="control-label"><strong>数量</strong>&nbsp;<span class="required">*</span></label>
+
+        <div class="controls">
+          <input id="quantity" name="quantity" type="number" min="1" required="required"/>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="unit" class="control-label"><strong>数量单位</strong>&nbsp;<span class="required">*</span></label>
+
+        <div class="controls">
+          <input name="unit" type="text" id="unit" required="required"/>
+          <span id="unit_weight" class="help-inline"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="harbor" class="control-label"><strong>卸货点</strong>&nbsp;<span class="required">*</span></label>
+
+        <div class="controls">
+          <select name="harbor" id="harbor" required="required">
+            {% for harbor in harbor_list %}
+              <option value="{{ harbor.name }}">{{ harbor.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <label class="checkbox" for="urgent-input">
+            <input name="urgent" id="urgent-input" type="checkbox"/>
+            <strong>加急</strong>
+          </label>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <label class="checkbox" for="returned-input">
+            <input name="returned" id="returned-input" type="checkbox"/>
+            <strong>退货</strong>
+          </label>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <div class="controls">
+          <input type="hidden" name="order_id" value="{{ order.id }}">
+          <button class="btn btn-large btn-primary">
+            <i class="icon-ok icon-white"></i>&nbsp;保存并返回
+          </button>
+          <a class="btn btn-large" href="{{ request.args.get("url") or url_for("order.order",id_=order.id) }}">
+            <i class="icon-backward"></i>&nbsp;返回
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>
+  </div>
+
+{% endblock %}

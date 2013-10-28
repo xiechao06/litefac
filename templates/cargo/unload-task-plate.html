@@ -1,0 +1,7 @@
+<ul class="nav nav-tabs nav-stacked">
+{% for unload_session in options %}
+  <li>
+    <a href="{{ url_for('cargo.unload_task', unload_session=unload_session.id, __step__=1) }}">{{ unload_session.plate_ }}</a>
+  </li>
+{% endfor %}
+</ul>

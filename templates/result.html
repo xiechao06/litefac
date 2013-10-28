@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block body %}
+  <div class="container">
+    {% if error_content %}
+      <div class="alert">
+        <p class="text-error">{{ error_content }}</p>
+      </div>
+    {% endif %}
+    {% if content %}
+      <div class="alert">
+        <p class="text-success">{{ content }}</p>
+      </div>
+    {% endif %}
+    <br/>
+    <br/>
+    <a href="{{ back_url or request.headers.get("referer") or "/" }}" class="btn btn-large">
+      <i class="icon-backward"></i>&nbsp;{{ _("返回") }}
+    </a>
+  </div>
+{% endblock %}

@@ -1,0 +1,22 @@
+#!/bin/sh
+
+${EXEC_VIRTUAL_ENV_ACTIVATE}
+
+case "$1" in
+start)
+    cd ${WORK_ENV_DIR}
+    python -m lite_mms.BLT --pidfile=/var/run/lite-mms-blt.pid
+    ;;
+stop)
+    kill `cat /var/run/lite-mms-blt.pid`
+    ;;
+restart)
+    kill `cat /var/run/lite-mms-blt.pid`
+    cd ${WORK_ENV_DIR}
+    python -m lite_mms.BLT --pidfile=/var/run/lite-mms-blt.pid
+    ;;
+*)
+    echo "Usage: $NAME {start|stop|restart|reload|force-reload|status|configtest}" >&2 
+    exit 1 
+    ;;
+esac

@@ -1,0 +1,7 @@
+<ul class="nav nav-tabs nav-stacked">
+{% for harbor in options %}
+  <li>
+    <a href="{{ url_for('cargo.unload_task', unload_session=request.args["unload_session"], __step__=2, harbor=harbor.name) }}">{{ harbor.name }}</a>
+  </li>
+{% endfor %}
+</ul>

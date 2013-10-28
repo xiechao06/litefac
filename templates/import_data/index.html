@@ -1,0 +1,15 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+    <div class="ym-wrapper">
+        <div class="ym-wbox">
+            <ul>
+                <li><a href="{{ url_for('data.products') }}">导入产品</a>
+                </li>
+                <li><a href="{{ url_for('data.customers') }}">导入客户</a>
+                </li>
+                <li><a href="{{ url_for('data.consignments') }}">导出发货单</a></li>
+                <li><a href="{{ url_for('data.work_command_list') }}">生成班组绩效</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

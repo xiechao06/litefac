@@ -1,0 +1,9 @@
+{% if obj.pic_path %}
+  <ul class="thumbnails">
+    <li class="span2">
+      <a class="thumbnail fancybox" href="{{ field_value }}" rel="{{ obj.product }}">
+        <img src="{{ field_value }}" alt="{{ obj.product }}" class="bordered"/>
+      </a>
+    </li>
+  </ul>
+{% endif %}

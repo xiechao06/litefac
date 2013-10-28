@@ -1,0 +1,116 @@
+{% extends "layout.html" %}
+{% block __data_browser__custom_external_block %}
+  <script type="text/javascript">
+    $(function () {
+      var products = {{ products|safe }};
+      var selected_product_type = $("#product_type").val();
+      $.each(products[selected_product_type], function (idx, entry) {
+        $("#product").append('<option value="' + entry.id + '">' + entry.name + '</option>');
+      });
+      var product_id = {{ current.product.id }};
+      $("#product").val(product_id).trigger("change");
+      $("#product_type").change(function (ui) {
+        var selected_product_type = $("#product_type").val();
+        $("#product").empty();
+        $.each(products[selected_product_type], function (idx, entry) {
+          $("#product").append("<option value=" + entry.id + ">" + entry.name + "</option>");
+          $("#product").children().filter("option[value=" + product_id + "]").attr("selected", "selected");
+        });
+        $("#product").select2({width: "resolve"})
+      });
+      {% if current.consignment.MSSQL_ID or not permissions.CargoClerkPermission.can() %}
+        $("input").attr("disabled", true);
+        $("select").attr("disabled", true);
+      {% endif %}
+    });
+  </script>
+{% endblock %}
+{% block body %}
+  <div class="container">
+    <form class="form-horizontal" action="{{ url_for("delivery.consignment_product", id_=current.id) }}" method="POST">
+      <div class="control-group">
+        <label class="control-label" for="product_type"><strong>产品类型</strong></label>
+
+        <div class="controls">
+          <select id="product_type" name="product_type_id" required="required">
+            {% for pt in product_types %}
+              <option value="{{ pt.id }}"
+                      {% if pt.id == current.product.product_type_id %}selected="selected"{% endif %}>{{ pt.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="product"><strong>产品名称</strong></label>
+
+        <div class="controls"><select name="product_id" id="product">
+        </select></div>
+      </div>
+      {% if not current.consignment.measured_by_weight %}
+        <div class="control-group">
+          <label class="control-label" for="spec"><strong>型号</strong></label>
+
+          <div class="controls"><input type="text" id="spec" name="spec"
+                                       value="{{ current.spec }}"></div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="type"><strong>规格</strong></label>
+
+          <div class="controls"><input type="text" name="type" id="type"
+                                       value="{{ current.type }}"></div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="quantity"><strong>数量</strong></label>
+
+          <div class="controls">
+            <input type="text" name="quantity" id="quantity"
+                   value="{{ current.quantity }}" required="required"></div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="unit"><strong>单位</strong></label>
+
+          <div class="controls"><input type="text" name="unit" id="unit"
+                                       value="{{ current.unit }}" required="required"></div>
+        </div>
+      {% endif %}
+      <div class="control-group">
+        <label class="control-label" for="weight"><strong>净重(KG)</strong></label>
+
+        <div class="controls"><input type="number" name="weight" id="weight"
+                                     value="{{ current.weight }}" required="required"></div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="returned_weight"><strong>退镀重量(KG)</strong></label>
+
+        <div class="controls">
+          <input type="number" name="returned_weight" id="returned_weight"
+                 value="{{ current.returned_weight }}" required="required"></div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="team"><strong>生产班组</strong></label>
+
+        <div class="controls"><select name="team_id" id="team" required="required">
+          {% for team in team_list %}
+            <option value="{{ team.id }}"
+                {% if team.id == current.team_id %}
+                    selected="selected"
+                {% endif %} >{{ team.name }}</option>
+          {% endfor %}
+        </select></div>
+      </div>
+      <input type="hidden" name="url" value="{{ request.args.get("url") or url_for("delivery.consignment", id_=current.consignment.id) }}">
+
+      <div class="control-group">
+        <div class="controls">
+          {% if not current.consignment.MSSQL_ID and permissions.CargoClerkPermission.can() %}
+            <button class="btn btn-large btn-primary">
+                <i class="icon-ok icon-white"></i>&nbsp;保存
+            </button>
+          {% endif %}
+          <a href="{{ request.args.get("url") or url_for("delivery.consignment", id_=current.consignment.id) }}" class="btn btn-large">
+              <i class="icon-backward"></i>&nbsp;返回
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>{% endblock %}

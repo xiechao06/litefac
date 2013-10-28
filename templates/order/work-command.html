@@ -1,0 +1,101 @@
+{% extends "layout.html" %}
+{% block __data_browser__custom_external_block %}
+  {{ super() }}
+  <script type="text/javascript">
+    $(function () {
+      {% if sub_order.returned %}
+        $("#procedure").val(9).trigger("change");
+      {% endif %}
+      function f() {
+        var value = $("#schedule_count").val();
+        value = Math.min(value, {{ sub_order.remaining_quantity }});
+        $("#schedule_count").val(value);
+        value = Math.round(value / {{ sub_order.remaining_quantity }} * {{ sub_order.remaining_weight }});
+        $("#schedule_weight").val(value);
+      }
+
+      $("#schedule_count").change(f);
+      $("#schedule_count").keyup(f);
+    });
+  </script>
+{% endblock %}
+{% block body %}
+  <div class="container">
+    <form class="form-horizontal" action="{{ url_for('order.work_command') }}" method="POST">
+      <div class="control-group">
+        <label class="control-label"><strong>默认车间</strong></label>
+
+        <div class="controls">
+          <p class="padding">{{ department.name }}</p>
+        </div>
+      </div>
+      {% if not sub_order.measured_by_weight %}
+        <div class="control-group">
+          <label for="schedule_count" class="control-label">
+            <strong>排产数量(单位:{{ sub_order.unit }})</strong>
+          </label>
+
+          <div class="controls">
+            <input size="10" name="schedule_count" id="schedule_count" type="number" value="{{ sub_order.remaining_quantity }}" max="{{ sub_order.remaining_quantity }}" min="1" required="required"/>
+            <span class="help-inline">平均每（{{ sub_order.unit }}）重量为：{{ sub_order.weight/sub_order.quantity }}（KG）</span>
+          </div>
+        </div>
+      {% endif %}
+      <div class="control-group">
+        <label for="schedule_weight" class="control-label"><strong>排产重量(KG)</strong></label>
+
+        <div class="controls">
+          <input name="schedule_weight" id="schedule_weight" type="number" value="{{ sub_order.remaining_weight }}" max="{{ sub_order.remaining_weight }}" min="1"
+              {% if not sub_order.measured_by_weight %}
+                 readonly="readonly"
+              {% endif %}
+                 required="required"/>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label for="tech_req" class="control-label"><strong>技术要求</strong></label>
+
+        <div class="controls">
+          <input size="10" name="tech_req" id="tech_req" type="text" value="{{ sub_order.tech_req }}"/>
+        </div>
+      </div>
+
+      {% if not sub_order.returned %}
+        <div class="control-group">
+          <label for="procedure" class="control-label">
+              <strong>工序</strong>
+          </label>
+
+          <div class="controls">
+            <select size="1" name="procedure" id="procedure" required='required'>
+              {% for procedure in procedure_list %}
+                <option value="{{ procedure.id }}">{{ procedure.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      {% endif %}
+      <div class="control-group">
+        <div class="controls">
+          <label for="urgent-input" class="checkbox">
+            <input name="urgent" id="urgent-input" type="checkbox" {% if sub_order.urgent %} checked="checked" {% endif %}/>加急
+          </label>
+        </div>
+      </div>
+      <input type="hidden" name="sub_order_id" value="{{ sub_order.id }}"/>
+      <input type="hidden" name="url" value="{{ request.args.get("url") or url_for("order.order", id_=sub_order.order.id) }}">
+      <div class="control-group">
+        <div class="controls">
+          <button class="btn btn-large btn-primary">
+              <i class="icon-ok icon-white"></i>&nbsp;保存
+          </button>
+          <a class="btn btn-large" href="{{ request.args.get("url") or url_for("order.order", id_=sub_order.order.id) }}">
+              <i class="icon-backward"></i>&nbsp;返回
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}
+

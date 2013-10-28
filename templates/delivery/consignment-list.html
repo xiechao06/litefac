@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+{% block __data_browser__custom_external_block %}
+  <script type="text/javascript">
+    $(function () {
+      $("#is_paid-select").change(function () {
+        $(this).parents("form").submit();
+      });
+      $("#is_paid-select").val('{{ request.args.get("is_paid") }}');
+      $("#customer").change(function () {
+        $(this).parents("form").submit();
+      });
+    })
+  </script>
+{% endblock %}
+{% block body %}
+  <div class="container">
+    <form action="{{ url_for("delivery.consignment_list") }}" class="form-inline" id="filters">
+      <div class="span2">
+        <label for="is_paid-select">是否支付:</label>
+        <select name="is_paid" id="is_paid-select" class="input-small">
+          <option value="0">未支付</option>
+          <option value="1">已支付</option>
+        </select>
+      </div>
+      <div>
+        <label for="customer" class="padding">{{ _("客户名称") }}</label>
+        <select name="customer_id" id="customer">
+          <option value="0">所有</option>
+          {% for c in customer_list %}
+            <option value="{{ c.id }}" {% if c.id == request.args.get("customer_id")|int %}selected="selected"{% endif %}>
+              {{ c.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+    </form>
+    <legend>发货单列表</legend>
+    <table class="table table-striped table-bordered table-condensed">
+      <thead>
+      <tr>
+        <th>发货单号</th>
+        <th>客户名称</th>
+        <th>支付方式</th>
+        <th>是否支付</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for cons in consignment_list %}
+        <tr>
+          <td>
+            <a href="{{ url_for('delivery.consignment', id_=cons.id, url=request.url) }}">{{ cons.id }}</a>
+          </td>
+          <td>{{ cons.customer.name }}</td>
+          <td>{{ "现金支付" if cons.pay_in_cash else "月结" }}</td>
+          <td>{{ "是" if cons.is_paid else "未支付" }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% from "pagination.html" import render_pagination %}
+    {{ render_pagination(pagination) }}
+  </div>
+{% endblock %}

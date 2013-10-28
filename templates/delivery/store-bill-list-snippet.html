@@ -1,0 +1,66 @@
+{% if field_value %}
+  <table class="table table-bordered table-condensed">
+    <thead>
+    <tr>
+      <th>仓单号</th>
+      <th>存放点</th>
+      <th>产品名称</th>
+      <th>公司名称</th>
+      <th>大约净重(KG)</th>
+      <th>产品图片</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for store_bill in field_value %}
+      <tr>
+        <td>
+          <a href="{{ url_for("store_bill.store_bill", id_=store_bill.id, url=request.url) }}">{{ store_bill.id }}</a>
+        </td>
+        <td>{{ store_bill.harbor.name }}</td>
+        <td>{{ store_bill.sub_order.product.name }}</td>
+        <td>{{ store_bill.customer.name }}</td>
+        <td>{{ store_bill.weight }}</td>
+        <td>{% if store_bill.pic_url %}
+          <ul class="thumbnails">
+            <li class="span2">
+              <a href="{{ store_bill.pic_url }}" class="fancybox thumbnail" rel="group" title="{{ store_bill.product.name }}">
+                <img src="{{ store_bill.pic_url }}" class="bordered" alt="{{ store_bill.product.name }}"/>
+              </a>
+            </li>
+          </ul>
+        {% endif %}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% for store_bill in field_value %}
+    <input type="hidden" name="store_bill_list" value="{{ store_bill.id }}"/>
+  {% endfor %}
+
+{% else %}
+  <span class="text-error">无</span>
+{% endif %}
+{% if obj and obj.id %}
+  <a class="btn btn-primary" href="{{ url_for("delivery.store_bill_add", url=request.url, delivery_session_id=obj.id) }}">
+    <i class="icon-plus"></i>&nbsp;添加仓单
+  </a>
+{% else %}
+  <button class="btn btn-primary" id="add-store-bill" type="button">
+    <i class="icon-plus"></i>&nbsp;添加仓单
+  </button>
+  <script type="text/javascript">
+    $("#add-store-bill").click(function () {
+      var url = "{{ url_for("store_bill.to_delivery_list", url=request.path if not request.args.get("url") else request.path +"?url="+request.args.get("url")) }}&plate_=" + $("[name=plate_]").val() + "&tare=" + $("[name=tare]").val();
+      if ($("[name=with_person]").is(":checked")) {
+        url += "&with_person=on";
+      }
+      {% if request.args.get("store_bill_list") %}
+        var id_list = {{ request.args.getlist("store_bill_list")|tojson|safe }};
+        $.each(id_list, function (idx, value) {
+          url += "&store_bill_list=" + value;
+        });
+      {% endif %}
+      location.href = url
+    });
+  </script>
+{% endif %}

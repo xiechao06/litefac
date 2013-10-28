@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="ym-wrapper">
+    <div class="ym-wbox">
+        <table class="bordertable">
+            <thead>
+                <tr>
+                    <th>{{ _("编号") }}</th>
+                    <th>{{ _("车间") }}</th>
+                    <th>{{ _("班组") }}</th>
+                    <th>{{ _("报告人") }}</th>
+                    <th>{{ _("报告时间") }}</th>
+                    <th>{{ _("产品") }}</th>
+                    <th>{{ _("重量") }}</th>
+                    <th>{{ _("数量") }}</th>
+                    <th>{{ _("工单编号") }}</th>
+                    <th>{{ _("订单编号") }}</th>
+                    <th>{{ _("客户") }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                {% for dr in dr_list %}
+                    <td>{{ dr.id }}</td>
+                    <td>{{ dr.department }}</td>
+                    <td>{{ dr.team }}</td>
+                    <td>{{ dr.reporter }}</td>
+                    <td>{{ dr.report_time}}</td>
+                    <td>{{ dr.product_name }}</td>
+                    <td>{{ dr.weight }}(公斤)</td>
+                    <td>{{ dr.quantity }}{{ dr.unit }}</td>
+                    <td><a href="{{ url_for("manufacture.work_command", _id=dr.work_command_id, backref=request.url) }}">{{ dr.work_command_id }}</a></td>
+                    <td><a href="{{ url_for("order.order", id=dr.order.id) }}">{{ dr.order.customer_order_number }}</a></td>
+                    <td>{{ dr.customer }}</td>
+                {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+        {% from "pagination.html" import render_pagination %}
+        {{ render_pagination(pagination) }}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,143 @@
+{% extends "layout.html" %}
+{% block __data_browser__customized_head_block %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static',filename="js/fancybox/source/jquery.fancybox.css") }}" type="text/css" media="screen">
+  <script type="text/javascript" src="{{ url_for('static',filename="js/fancybox/source/jquery.fancybox.pack.js") }}"></script>
+  <script type="text/javascript">
+    $(function () {
+
+      var products = {{ products|safe }};
+      var selected_product_type = {{ task.product.product_type.id }};
+      if (selected_product_type in products) {
+        $.each(products[selected_product_type], function (idx, entry) {
+          $("#product").append('<option value="' + entry.id + '">' + entry.name + '</option>');
+        });
+      }
+      var product_id = {{ task.product.id }};
+      $("#product").val(product_id).trigger("change");
+      $("#product_type").change(function (ui) {
+        var selected_product_type = $("#product_type").val();
+        $("#product").empty();
+        $.each(products[selected_product_type], function (idx, entry) {
+          $("#product").append("<option value=" + entry.id + ">" + entry.name + "</option>");
+        });
+        $("#product").val(product_id);
+        $("#product").select2({width: "resolve"});
+      });
+      $("#delete-button").click(function () {
+        if (confirm("确定删除该卸货任务？")) {
+          $("input[type=hidden][name=method]").val("delete");
+          $(this).parents("form").submit();
+        }
+      });
+      $(".fancybox").fancybox();
+    });
+  </script>
+{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <div class="alert alert-info">
+      车辆
+      <strong>{{ task.unload_session.plate }}</strong>
+      在卸货点
+      <strong>{{ task.harbor.name }}</strong>
+      完成了一次属于客户
+      <strong>{{ task.customer.name }}</strong>
+      的卸货任务
+    </div>
+    <form class="form-horizontal" method="POST">
+      <legend>卸货任务详情&nbsp;
+        {% if not task.weight %}
+          <button class="btn btn-danger" type="button" id="delete-button">
+            <i class="icon-trash icon-white"></i>&nbsp;删除卸货任务
+          </button>
+          <input type="hidden" name="method" value="">{% endif %}
+      </legend>
+      <div class="control-group">
+        <label for="customer" class="control-label"><strong>客户</strong></label>
+
+        <div class="controls">
+          <select name="customer" id="customer">
+            {% for customer in customers %}
+              <option value="{{ customer.id }}" {% if customer.id == task.customer.id %}selected{% endif %}>
+                {{ customer.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="product_type" class="control-label"><strong>产品类型</strong></label>
+
+        <div class="controls"><select id="product_type" name="product_type">
+          {% for pt in product_types %}
+            <option value="{{ pt.id }}" {% if pt.id == task.product.product_type.id %}selected="selected"{% endif %}>{{ pt.name }}</option>
+          {% endfor %}
+        </select></div>
+      </div>
+      <div class="control-group">
+        <label for="product" class="control-label"><strong>产品名称</strong></label>
+
+        <div class="controls">
+          <select name="product" id="product"></select>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label"><strong>上次称重重量(KG)</strong> </label>
+
+        <div class="controls">
+          <p class="padding">{{ task.last_weight }}</p>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label"><strong>上次称重是否车上有人</strong> </label>
+
+        <div class="controls">
+          <p class="padding">{{ task.unload_session.with_person_des }}</p>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="weight" class="control-label"><strong>本次称重的重量为(KG)</strong></label>
+
+        <div class="controls">
+          <input type="number" name="weight" id="weight" size="20" required="True" min="1" max="{{ task.last_weight - 1 }}"
+              {% if task.weight %}
+                 value="{{ task.last_weight - task.weight }}"
+              {% endif %} />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="pic-url" class="control-label">
+          <strong>此次卸货的图片</strong>
+        </label>
+
+        <div class="controls">
+          {% if task.pic_url %}
+            <ul class="thumbnails">
+              <li class="span2">
+                <a class="fancybox thumbnail" href="{{ task.pic_url }}" rel="group" title="{{ task.product.name }}">
+                  <img class="bordered" src="{{ task.pic_url }}" alt="{{ task.product.name }}"/>
+                </a>
+              </li>
+            </ul>
+          {% endif %}
+        </div>
+      </div>
+      <input type="hidden" name="url" value="{{ request.args.get('url') or url_for('cargo.unload_session',id_=task.unload_session.id) }}">
+
+      <div class="control-group">
+        <div class="controls">
+          <button class="btn btn-large btn-primary">
+            <i class="icon-ok icon-white"></i>&nbsp;保存
+          </button>
+          <a class="btn btn-large" href="{{ request.args.get("url") or url_for('cargo.unload_session',id_=task.unload_session.id) }}">
+            <i class="icon-backward"></i>&nbsp;返回
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% if field_value %}
+  <table class="table table-bordered table-condensed">
+    <thead>
+    <tr>
+      <th>编号</th>
+      <th>客户</th>
+      <th>是否导入</th>
+      <th>是否过期</th>
+      <th>支付方式</th>
+      <th>产品</th>
+      <th>创建日期</th>
+    </tr>
+    </thead>
+    {% for cn in field_value %}
+      <tr>
+        <td>
+          <a href="{{ url_for("consignment.consignment", id_=cn.id, url=request.url) }}">{{ cn.consignment_id }}</a>
+        </td>
+        <td>
+          <a href="{{ model_view.data_browser.get_form_url(cn.customer) }}">{{ cn.customer.name }}</a>
+        </td>
+        <td>{% if cn.MSSQL_ID %}是{% else %}<div class="text-error">否</div>{% endif %}</td>
+        <td>{% if cn.stale %}<div class="text-error">是</div>{% else %}否{% endif %}</td>
+        <td>{% if cn.pay_in_cash %}
+        现金支付({{ "已支付" if cn.is_paid else "<span class='text-error'>未支付</span>"|safe }})
+         {% else %}
+          月结
+        {% endif %} </td>
+        <td>
+          {% if cn.product_list %}
+            <a data-toggle="collapse" href="#cn-{{ cn.id }}-entries">{{ cn.product_list|length }}</a>
+            <i class="icon-chevron-down"></i>
+            <div id="cn-{{ cn.id }}-entries" class="collapse" data-role="cn-entries">
+              <div class="accordion-inner">
+                {% for entry in cn.product_list %}
+                  <div><a href="{{ model_view.data_browser.get_form_url(entry) }}">{{ entry.product.product_type}} - {{ entry.product }}({{ entry.weight}}公斤)</a></div>
+                {% endfor %}
+              </div>
+            </div>
+          {% else %}
+            0
+          {% endif %}
+        </td>
+        <td>{{ cn.create_time }}</td>
+      </tr>
+    {% endfor %}
+    <tbody>
+    </tbody>
+  </table>
+{% else %}
+  <span class="text-error">无</span>
+{% endif %}

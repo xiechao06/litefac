@@ -1,0 +1,54 @@
+{% if field_value %}
+<table class="table table-bordered table-condensed">
+  <thead>
+    <tr>
+    	<th>编号</th>
+    	<th>客户</th>
+    	<th>是否打印</th>
+    	<th>是否过期</th>
+    	<th>订单</th>
+      <th>产品</th>
+    	<th>创建日期</th>
+    </tr>
+  </thead>
+    {% for gr in field_value %}
+      <tr>
+        <td>
+          <a href="{{ url_for("goods_receipt.goods_receipt", id_=gr.id, url=request.url) }}">{{ gr.receipt_id }}</a>
+        </td>
+        <td>
+          <a href="{{ model_view.data_browser.get_form_url(gr.customer, url=request.url) }}">{{ gr.customer.name }}</a>
+        </td>
+        <td>{% if gr.printed %}是{% else %}<div class="text-error">否</div>{% endif %}</td>
+        <td>{% if gr.stale %}<div class="text-error">是</div>{% else %}否{% endif %}</td>
+        <td>
+          {% if gr.order_unwrapped %}
+            <a href="{{ url_for("order.order", id_=gr.order.id, url=request.url)}}">{{gr.order.customer_order_number}}</a>
+          {% else %}
+            --
+          {% endif %}
+        </td>
+        <td>
+          {% if gr.goods_receipt_entries %}
+          <a data-toggle="collapse" href="#gr-{{ gr.id }}-entries">{{ gr.goods_receipt_entries|length }}</a>
+          <i class="icon-chevron-down"></i>
+          <div id="gr-{{ gr.id }}-entries" class="collapse" data-role="gr-entries">
+            <div class="accordion-inner">
+              {% for entry in gr.goods_receipt_entries %} 
+              <div><a href="{{ model_view.data_browser.get_form_url(entry, url=request.url) }}">{{ entry.product.product_type}} - {{ entry.product }}({{ entry.weight}}公斤)</a></div>
+              {% endfor %}
+            </div>
+          </div> 
+          {% else %}
+          0
+          {% endif %}
+        </td>
+        <td>{{ gr.create_time }}</td>
+      </tr>
+    {% endfor %}
+  <tbody>
+  </tbody>  
+</table>
+{% else %}
+<span class="text-error">无</span>
+{% endif %}

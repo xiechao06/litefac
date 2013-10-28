@@ -1,0 +1,94 @@
+{% extends "report____/base_layout.html" %}
+
+{% block report____custom_external_block %}
+  <link rel="stylesheet" href="{{ url_for('static', filename="css/customer.css") }}"/>
+{% endblock %}
+
+{% block report____nav_bar_block %}
+  <header class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        {% if g.request_from_mobile %}
+          <div class="brand">
+            LITE-MMS
+            <small><i>- {{ titlename }}</i></small>
+          </div>
+          {% if current_user.is_authenticated() and nav_bar %}
+            <a href="#" class="btn btn-navbar">
+              <i class="icon-search nav-text"></i>
+            </a>
+            <button class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse" type="button">
+              <i class="icon-reorder"></i>
+            </button>
+            <nav class="nav-collapse">
+              {{ nav_bar.as_ul("active")|safe }}
+              <ul class="nav">
+                <li>
+                  <a href="{{ url_for('auth.logout') }}" class="navbar-text">
+                    <i class="icon-off icon-large"></i>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          {% endif %}
+        {% else %}
+          <div class="brand">
+            LITE-MMS
+          </div>
+          {% if current_user.is_authenticated() and nav_bar is defined %}
+            <button class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse" type="button">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <nav class="nav-collapse">
+              {{ nav_bar.as_ul("active", grouped=True)|safe }}
+              <form class="navbar-search pull-right form-search"
+                    action="{{ url_for('search.search') }}" method="GET">
+                <div class="input-append">
+                  <input class="search-query span2" type="text"
+                         placeholder="关键词..." name="content"
+                         {% if keywords %}value="{{ keywords }}"{% endif %}/>
+                  <button class="btn btn-inverse">搜索</button>
+                </div>
+              </form>
+              <bold class="navbar-text pull-right">
+                欢迎
+                <mark><strong>{{ current_user.username }}</strong>
+                </mark>
+                您是
+                <strong>{{ current_user.group_name }}</strong>
+                <a href="{{ url_for('auth.logout') }}">退出</a>
+              </bold>
+            </nav>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </header>
+{% endblock %}
+
+{% block report____footer_block %}
+  <footer class="footer hidden-phone">
+    <div class="container">
+      <div class="muted">
+        copyright@ LITE-MMS
+      </div>
+    </div>
+  </footer>
+  {% if g.request_from_mobile %}
+    <div class="context-menu collapse in navbar-fixed-bottom">
+      <div class="btn-group">
+        <a href="#" class="btn-large refresh-btn">
+          <i class="icon-refresh"></i>
+          <span>刷新</span>
+        </a>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-large exit-btn">
+          <i class="icon-home"></i>&nbsp;退出
+        </button>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

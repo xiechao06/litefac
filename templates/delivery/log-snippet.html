@@ -1,0 +1,30 @@
+<div class="accordion" id="log-accordion">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" href="#log-list">点击查看</a>
+    </div>
+    <div id="log-list" class="accordioin-body collapse">
+      <div class="accordion-inner">
+        <ul>
+          {% if field_value %}
+            {% for log in field_value %}
+              <li>
+                {% if log.action == "新建" %}
+                  {{ "[%s]: 用户%s创建了本收货单" %(log.create_time, log.actor) }}
+                {% else %}
+                  {{ "[%s]: 用户%s对<i>%s</i>(%s)执行了[%s]操作" |safe %( log.create_time, log.actor, log.obj_cls, log.obj, log.action) }}
+                {% endif %}
+                {% if log.message|length > 0 %}
+                  {{ log.message }}
+                {% endif %}
+              </li>
+            {% endfor %}
+          {% else %}
+            <p class="text-error">没有日志</p>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+

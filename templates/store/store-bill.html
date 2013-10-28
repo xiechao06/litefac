@@ -1,0 +1,153 @@
+{% extends "layout.html" %}
+{% block __data_browser__custom_external_block %}
+  <script type="text/javascript">
+    $(function () {
+      $("form").submit(function () {
+        if ($("#harbor").val() == "") {
+          $(".required").removeClass("hide");
+          return false;
+        }
+      });
+    });
+  </script>
+{% endblock %}
+{% block body %}
+  <div class="container">
+    <legend>仓单详情</legend>
+    <form class="form-horizontal" action="{{ url_for('store_bill.store_bill', id_=store_bill.id) }}" method="POST">
+      <div class="control-group">
+        <label class="control-label">
+          <strong>仓单号</strong>
+        </label>
+
+        <div class="controls">
+          <p class="padding">{{ store_bill.id }}</p>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">
+          <strong>工单号</strong>
+        </label>
+
+        <div class="controls">
+          <p class="padding">{{ store_bill.qir.work_command_id }}</p>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><strong>客户名称</strong>
+        </label>
+
+        <div class="controls">
+          <p class="padding">{{ store_bill.customer.name }}</p>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><strong>产品名称</strong>
+        </label>
+
+        <div class="controls">
+          <p class="padding">{{ store_bill.product_name }}</p>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><strong>存放点</strong>
+        </label>
+
+        <div class="controls">
+          <select name="harbor" id="harbor">
+            <option></option>
+            {% for harbor in harbors %}
+              <option value="{{ harbor.name }}"
+                  {% if harbor.name == store_bill.harbor.name %}
+                      selected="selected"
+                  {% endif %} >
+                {{ harbor.name }}
+              </option>
+            {% endfor %}
+          </select>
+          <span class="required hide">请选择</span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">
+          <strong>{{ "预估" if not store_bill.delivery_task }}重量(KG)</strong>
+        </label>
+
+        <div class="controls">
+          <input type="number" name="weight" value="{{ store_bill.weight }}" required="required">
+        </div>
+      </div>
+      {% if not store_bill.sub_order.measured_by_weight %}
+        <div class="control-group">
+          <label class="control-label">
+            <strong>数量</strong>
+          </label>
+
+          <div class="controls">
+            <input type="number" value="{{ store_bill.quantity }}" name="quantity" required="required">
+            <span class="help-inline">({{ store_bill.unit }})</span>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label">
+            <strong>规格-型号</strong>
+          </label>
+
+          <div class="controls">
+            <p class="padding">{{ (store_bill.sub_order.spec, store_bill.sub_order.type)|join("-") }}</p>
+          </div>
+        </div>
+      {% endif %}
+      <div class="control-group">
+        <label class="control-label">
+          <strong>生成日期</strong>
+        </label>
+
+        <div class="controls">
+          <p class="padding">{{ store_bill.create_time }}</p>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">
+          <strong>子订单号</strong>
+        </label>
+
+        <div class="controls">
+          <p class="padding">{{ store_bill.sub_order.id }}</p>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">
+          <strong>订单编号</strong>
+        </label>
+
+        <div class="controls">
+          <p class="padding">{{ store_bill.sub_order.order.customer_order_number }}</p>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <input type="hidden" name="url" value="{{ request.args.get("url") or url_for("store_bill.store_bill_list") }}">
+          {% if permissions.roles.QualityInspectorPermission.can() %}
+            <button class="btn btn-primary btn-large">
+              <i class="icon-ok icon-white"></i>&nbsp;保存
+            </button>
+            {% if store_bill.harbor %}
+              <a class="btn btn-large btn-success" href="{{ url_for("store_bill.store_bill_preview", id_=store_bill.id, url=request.url) }}">
+                <i class="icon-print icon-white"></i>&nbsp;预览
+              </a>
+            {% endif %}
+            <a class="btn btn-large" href="{{ request.args.get("url") or url_for("store_bill.store_bill_list") }}">
+              <i class="icon-backward"></i>&nbsp;返回
+            </a>
+          {% else %}
+            <a class="btn btn-large" href="{{ request.args.get("url") or "/" }}">
+              <i class="icon-backward"></i>&nbsp;返回
+            </a>
+          {% endif %}
+
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}

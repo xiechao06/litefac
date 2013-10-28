@@ -1,0 +1,15 @@
+{% extends "__data_browser__/list.html" %}
+
+{% block __data_browser__hint_block %}
+  {% if hint_message %}
+  <div class="alert alert-info">
+    * {{ hint_message }}
+  </div>
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+    {{ sub_nav_bar.as_ul("active")|safe }}
+    {{ super() }}
+{% endblock %}
+

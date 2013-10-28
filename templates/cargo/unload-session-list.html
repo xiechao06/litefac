@@ -1,0 +1,19 @@
+{% extends "__data_browser__/list.html" %}
+
+{% block __data_browser__custom_external_block %}
+  {{ super() }}
+  <script type="text/javascript">
+    $(function () {
+        $("[data-role=popover],[data-role=popover-title]").hide(); 
+        $("[data-toggle=popover]").each(function (idx) {
+          $(this).popover({content: $(this).next().html(), title: $(this).next().next().html()});
+             
+          });
+        });
+        // bootstrap默认的popover没有close按钮，这里增加一个
+        $(".popover-close").live('click', function () {
+          $(this).parents(".popover").prev().trigger("click");
+            });
+  </script>
+{% endblock %}
+

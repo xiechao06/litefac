@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+{% block __data_browser__custom_external_block %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename="css/customer.css") }}" media="print">
+  <script type="text/javascript" src="{{ url_for("static", filename="js/jquery-printarea.js") }}"></script>
+  <script type="text/javascript">
+    $(function () {
+      function print() {
+        $("#print-area").printArea();
+      }
+      print();
+      $("#print").click(print);
+    });
+  </script>
+  <style type="text/css">
+    #print-area {
+      display: None;
+    }
+  </style>
+{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <button class="btn btn-primary" id="print"><i class="icon-print"></i>&nbsp;打印</button>
+    <a href="{{ back_url }}" class="btn">返回</a>
+
+    <div id="print-area">
+      {% for gr in gr_list %}
+        {% set all_entries = gr.goods_receipt_entries %}
+        {% for entries in all_entries|batch(per_page) %}
+          <div class="page-next">
+            <h5 class="pull-right">NO. {{ gr.id }}</h5>
+            <table class="table table-striped table-bordered table-condensed">
+              <tbody>
+              <tr>
+                <th colspan="4"><h4 class="text-center">金禾域加工收货单</h4></th>
+              </tr>
+              <tr>
+                <th>收货单号</th>
+                <th colspan="3">
+                  <p class="text-center">{{ gr.receipt_id }}</p>
+                </th>
+              </tr>
+              <tr>
+                <th>公司名称</th>
+                <th colspan="3">
+                  <p class="text-center">{{ gr.customer.name }}</p>
+                </th>
+              </tr>
+              <tr>
+                <th>车辆车牌号</th>
+                <th colspan="3"><p
+                    class="text-center">{{ gr.unload_session.plate }}</p>
+                </th>
+              </tr>
+              <tr>
+                <th>日期</th>
+                <th colspan="3">
+                  <p class="text-center">{{ gr.create_time }}</p>
+                </th>
+              </tr>
+              <tr>
+                <th>产品类型</th>
+                <th>产品名称</th>
+                <th>净重(KG)</th>
+                <th>交货日期</th>
+              </tr>
+              {% for entry in entries %}
+                <tr>
+                  <td>
+                    {{ entry.product.product_type.name }}
+                  </td>
+                  <td>
+                    {{ entry.product.name }}
+                  </td>
+                  <td>
+                    {{ entry.weight }}
+                  </td>
+                  <td></td>
+                </tr>
+              {% endfor %}
+              <tr>
+                <td colspan="2">客户签名:</td>
+                <td colspan="2">
+                  总重量(KG):{{ gr.product_list|sum(attribute='weight') }}
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

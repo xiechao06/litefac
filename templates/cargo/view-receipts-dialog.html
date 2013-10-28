@@ -1,0 +1,42 @@
+<div id="view-receipts-dialog" class="modal hide fade" tabindex="-1">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">&times;</a>
+
+    <h3>{{ _("查看收货单") }}</h3>
+  </div>
+  <div class="modal-body" id="view-receipts-content">
+    <ul class="nav nav-tabs nav-stacked"></ul>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">关闭</a>
+  </div>
+</div>
+<script type="text/javascript">
+  $(function () {
+    $('#view-receipts-dialog').modal({show: false});
+    $('#view-receipts-dialog').on("show", function () {
+      {% if unload_session %}
+        var session_id = "{{ unload_session.id }}";
+      {% else %}
+        var session_id = $("input[type='radio']:checked").val();
+      {% endif %}
+
+      if (jQuery.type(session_id) == "undefined" || session_id == "") {
+        $("#view-receipts-content").html('<p class="text-error">' + "当前无记录" + '</p>');
+        return;
+      }
+      $("#view-receipts-content").children('ul').children('li').remove();
+      $.getJSON("/cargo/ajax/receipts-list?unload_session_id=" + session_id,
+          function (data) {
+            $("#view-receipts-content").children("ul").empty();
+            $.each(data, function (idx, v) {
+              $("#view-receipts-content").children("ul").append(
+                  '<li><a href="/cargo/goods-receipt/' + v.id + '?url=' + encodeURIComponent(location.href) + '">' +
+                      v.receipt_id + '(' + v.customer + ')' + '</a> </li>');
+            });
+          }).error(function (data) {
+            $("#view-receipts-content").children("ul").html('<p class="text-error">' + data.responseText + '</p>');
+          });
+    });
+  });
+</script>

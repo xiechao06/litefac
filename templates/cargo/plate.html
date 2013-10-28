@@ -1,0 +1,14 @@
+{% extends "__data_browser__/form.html" %}
+
+{% block __data_browser__customized_head_block %}
+  {{ super() }}
+  <script type="text/javascript">
+    $(function () {
+      var e = $("input#name");
+      if (e.val().length == 0) {
+        e.val("浙B ");
+      }
+      e[0].setSelectionRange(e.val().length, e.val().length);
+    });
+  </script>
+{% endblock %}

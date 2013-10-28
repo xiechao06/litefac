@@ -1,0 +1,41 @@
+{% extends "admin/master.html" %}
+{% block head %}
+    <script src="{{ url_for("static", filename="js/jquery-1.8.3.min.js") }}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#view").click(function () {
+                $("form").attr("method", "GET");
+                $("form").submit();
+            });
+            $("#export").click(function () {
+                $("form").attr("method", "POST");
+                $("form").submit();
+            });
+
+            $("input[name=begin_date]").change(function () {
+                $("input[name=end_date]").attr("min", $(this).val());
+            });
+            $("input[name=end_date]").change(function () {
+                $("input[name=begin_date]").attr("max", $(this).val());
+            })
+        });
+    </script>
+{% endblock %}
+{% block body %}
+    <div class="ym-wrapper">
+        <div class="ym-wbox">
+            <form action="{{ url_for('data.team_performance') }}">
+                生产日期在<input type="date" name="begin_date" {% if begin_date %}
+                value="{{ begin_date }}"
+                {% endif %} >与
+                <input type="date" name="end_date" {% if end_date %}
+                value="{{ end_date }}"
+                {% endif %} >之间的订单
+                <button class="ym-button" type="button" id="view">查询</button>
+                <br/>
+                <button class="ym-button" type="button" id="export">导出表格
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

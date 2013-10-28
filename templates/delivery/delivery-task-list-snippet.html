@@ -1,0 +1,79 @@
+{% if field_value %}
+  <table class="table table-bordered table-condensed">
+    <thead>
+    <tr>
+      <th>                </th>
+      <th>任务ID</th>
+      <th>装卸工</th>
+      <th>产品名称</th>
+      <th>对应的仓单</th>
+      <th>重量(公斤)</th>
+      <th>规格-型号</th>
+      <th>图片</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for row in field_value %}
+      <tr>
+        <td>
+          {% if not row.weight %}
+            <a class="del-ut" href="#" data-pk={{ row.id }}><i class="icon-remove"></i></a>
+          {% endif %}
+        </td>
+        <td>
+          {% if row.weight %}
+            <a href={{ url_for("delivery.delivery_task", id_=row.id, url=request.url) }}>{{ row.id }}</a>
+          {% else %}
+            {{ row.id }}
+          {% endif %}
+        </td>
+        <td>{{ row.actor.username }}</td>
+        <td>{{row.product}}</td>
+        <td>[{% for sb in row.store_bill_list %}
+          <a href="{{ url_for('store_bill.store_bill', id_=sb.id, url=request.url) }}">{{ sb.id }}</a>
+          {% if not loop.last %},
+          {% endif %}
+        {% endfor %}]
+        </td>
+        <td>
+          {% if row.weight %}
+            {{ row.weight }}
+          {% else %}
+            <a href="{{ url_for("delivery.weigh_delivery_task", id_=row.id, url=request.url) }}" class="btn btn-primary">
+            <i class="icon-truck icon-large"></i>&nbsp;称重
+            </a>
+          {% endif %}
+        </td>
+        <td>{{ row.spec_type_list|join("<br>")|safe }}</td>
+        <td>
+          {% if row.pic_url_list %}
+            {% for pic_url in row.pic_url_list if pic_url%}
+              <ul class="thumbnails">
+                <li class="span2">
+                  <a class="fancybox thumbnail" href="{{ pic_url }}" rel="group" title="{{ row.product.name }}">
+                    <img class="bordered" src="{{ pic_url }}" alt="{{ row.product.name }}"/>
+                  </a>
+                </li>
+              </ul>
+            {% endfor %}
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <script type="text/javascript">
+    $(function () {
+      $("a.del-ut").click(function () {
+        if (confirm("您确认要删除发货任务" + $(this).attr("data-pk") + "?")) {
+          $.post("/delivery/ajax/delivery-task/" + $(this).attr("data-pk"), {"action": "delete"}).success(
+              function () {
+                window.location.reload(false);
+              });
+        }
+      }).error(function(){alert("删除失败")});
+    });
+  </script>
+{% else %}
+  <span class="text-error">无</span>
+{% endif %}

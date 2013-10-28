@@ -1,0 +1,43 @@
+{% extends '__data_browser__/layout.html' %}
+{% block __data_browser__custom_external_block %}
+<style type="text/css">
+  .span2 {
+    padding: 20px;
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span2">
+      <div class="well">
+        <ul class="nav nav-list">
+          {% for group in sub_nav_bar.groups %}
+            <li class="muted"><h5>{{group.name}}</h5></li>
+            {% for nav_link in group.nav_links %}
+              {% if nav_link.enabler() %}
+              <li class="text-center active">
+              <a href="#" ><strong>{{nav_link.anchor}}</strong></a>
+              </li>
+              {% else %}
+              <li class="text-center">
+              <a href="{{nav_link.url}}">{{nav_link.anchor}}</a>
+              </li>
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="span8">
+      <ul>
+        <li><a href="{{ url_for('admin2.import_products') }}">导入产品</a></li>
+        <li><a href="{{ url_for('admin2.import_customers') }}">导入客户</a> </li>
+        <li><a href="{{ url_for('admin2.export_consignments') }}">导出发货单</a></li>
+        <li><a href="{{ url_for('admin2.team_performance') }}">班组绩效</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

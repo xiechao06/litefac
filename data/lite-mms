@@ -1,0 +1,16 @@
+server {
+    listen       ${PORT};
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix://tmp/lite-mms.sock;
+        uwsgi_param UWSGI_PYHOME ${PYHOME};
+        uwsgi_param UWSGI_CHDIR ${PYENV};
+        uwsgi_param UWSGI_MODULE lite_mms.basemain;
+        uwsgi_param UWSGI_CALLABLE app;
+    }
+    
+    location /static {
+        alias ${STATIC_DIR};
+    }
+}

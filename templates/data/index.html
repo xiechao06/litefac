@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <div class="ym-wrapper">
+        <div class="ym-wbox">
+            <ul>
+                <li><a href="{{ url_for('import_data.consignments', back_url=request.url) }}">导出发货单</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

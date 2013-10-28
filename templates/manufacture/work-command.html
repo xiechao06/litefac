@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+{% block body %}
+  <div class="container">
+  <legend>工单详情</legend>
+    <form class="form-horizontal">
+      <div class="control-group">
+        <label class="control-label"><strong>编号</strong></label>
+
+        <div class="controls"><p class="padding">{{ work_command.id }}</p>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><strong>创建日期</strong></label>
+
+        <div class="controls">
+          <p class="padding">{{ work_command.create_time }}</p></div>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><strong>产品</strong></label>
+
+        <div class="controls">
+          <p class="padding">{{ work_command.sub_order.product.name }}</p>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><strong>客户</strong></label>
+
+        <div class="controls">
+          <p class="padding">{{ work_command.sub_order.order.goods_receipt.customer.name }}</p>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><strong>车间</strong></label>
+
+        <div class="controls">
+          <p class="padding">{{ work_command.department.name }}</p></div>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><strong>班组</strong></label>
+
+        <div class="controls">
+          <p class="padding">{{ work_command.team.name }}</p></div>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><strong>工序前重量</strong></label>
+
+        <div class="controls"><p class="padding">{{ work_command.org_weight }}(公斤)</p>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><strong>工序前数量</strong></label>
+
+        <div class="controls">
+          <p class="padding">{{ work_command.org_cnt }}({{ work_command.sub_order.unit }})</p>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><strong>工序后重量</strong></label>
+
+        <div class="controls">
+          <p class="padding">{{ work_command.processed_weight }}(公斤)</p></div>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><strong>工序后数量</strong></label>
+
+        <div class="controls">
+          <p class="padding">{{ work_command.processed_cnt }}({{ work_command.sub_order.unit }})</p>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><strong>工序</strong></label>
+
+        <div class="controls">
+          <p class="padding">{{ work_command.procedure.name }}</p></div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+            <a href="{{ request.args.get("url") or "/" }}" class="btn btn-large">
+                <i class="icon-backward"></i>&nbsp;返回
+            </a>
+        </div>
+      </div>
+    </form>
+
+  </div>
+{% endblock %}

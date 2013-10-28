@@ -1,0 +1,7 @@
+<ul class="nav nav-pills nav-stacked">
+{% for task in goods_receipt.unload_session.task_list %}
+  <li>
+  [{{task.create_time.strftime("%m-%d %H:%S") }}] - 装卸工[<em>{{ task.creator.username }}]</em>在<em>{{task.harbor.name}}</em>卸货<strong>{{task.weight}}</strong>公斤
+  </li>
+{% endfor %}
+</ul>

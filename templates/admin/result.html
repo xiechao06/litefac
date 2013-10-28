@@ -1,0 +1,18 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+    <div class="ym-wrapper">
+        <div class="ym-wbox">
+            {% if error_content %}
+                <div class="box error">
+                    <p class="center">{{ error_content }}</p>
+                </div>
+            {% endif %}
+            {% if content %}
+                <div class="box success">
+                    <p class="center">{{ content }}</p>
+                </div>
+            {% endif %}
+            <a href="{{ back_url or request.headers.get("referer", "/") }}">{{ _("返回") }}</a>
+        </div>
+    </div>
+{% endblock %}

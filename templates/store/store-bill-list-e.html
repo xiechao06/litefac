@@ -1,0 +1,8 @@
+{% if field_value %}
+  {{ field_value }}
+{% else %}
+{% endif %}
+
+<a class="btn btn-primary" href="{{ url_for("store_bill.to_delivery_list", url=request.url) }}">
+  <i class="icon-plus icon-large"></i>&nbsp;添加仓单
+</a>

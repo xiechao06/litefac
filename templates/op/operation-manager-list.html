@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="ym-wrapper">
+        <div class="ym-wbox">
+            <ul>
+                <li><a href="{{ url_for('op_page.discard_report_list') }}">报废单管理</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('op_page.team_performance') }}">班组绩效管理</a>
+                </li>
+{#                <li><a href="{{ url_for('op_page.order_list_to_finish') }}">盘点订单</a></li>#}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

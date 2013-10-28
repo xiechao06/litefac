@@ -1,3 +1,4 @@
+/.Session.vim
 *.py[cod]
 
 # C extensions
@@ -33,3 +34,5 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+.ropeproject
+*.sw[p|o]

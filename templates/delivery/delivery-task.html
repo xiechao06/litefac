@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+{% block __data_browser__custom_external_block %}
+  <link rel="stylesheet" href="{{ url_for('static',filename="js/fancybox/source/jquery.fancybox.css") }}" type="text/css" media="screen">
+  <script type="text/javascript" src="{{ url_for('static',filename="js/fancybox/source/jquery.fancybox.pack.js") }}"></script>
+  <script type="text/javascript">
+    $(function () {
+      $(".fancybox").fancybox();
+    });
+    $("#delete-button").click(function () {
+      if (confirm("确定删除该卸货任务？")) {
+        $("input[type=hidden][name=method]").val("delete");
+        $(this).parents("form").submit();
+      }
+    });
+  </script>
+{% endblock %}
+{% block body %}
+  <div class="container">
+    <div class="alert alert-info">
+      车辆
+      <strong>{{ task.delivery_session.plate }}</strong>
+      {% if task.store_bill_list[0].harbor %}在装货点
+        <strong>{{ task.store_bill_list[0].harbor.name }}</strong>{% endif %}
+      完成了一次客户
+      <strong>{{ task.customer.name }}</strong>
+      的装货任务
+    </div>
+    <form class="form-horizontal" method="POST">
+      <legend>发货任务详情&nbsp;
+        <button class="btn btn-danger" id="delete-button" type="button"><i class="icon-remove"></i>&nbsp;删除</button>
+      </legend>
+      <input type="hidden" name="method"/>
+      <div class="control-group">
+        <label class="control-label"><strong>产品名称</strong></label>
+
+        <div class="controls">
+          <p class="padding">{{ task.product.name }}</p>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label"><strong>上次称重重量(KG)</strong></label>
+
+        <div class="controls">
+          <p class="padding">{{ task.last_weight }}</p>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><strong>上次称重时车上有人</strong></label>
+
+        <div class="controls">
+          <p class="padding">{{ task.delivery_session.with_person_des }}</p>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="weight" class="control-label"><strong>本次称重的重量为(KG)</strong></label>
+
+        <div class="controls">
+          <input type="number" name="weight" id="weight" size="20" required="True" min="{{ task.last_weight + 1 }}"/>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">
+          <strong>此次装货的图片</strong>
+        </label>
+
+        <div class="controls">
+          <ul class="thumbnails">
+            {% for pic_url in task.pic_url_list %}
+              {% if pic_url %}
+                <li class="span2">
+                  <a href="{{ pic_url }}" class="fancybox thumbnail" rel="group" title="{{ task.product.name }}">
+                    <img src="{{ pic_url }}" class="bordered" alt="{{ task.product.name }}"/>
+                  </a>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <input type="hidden" name="url" value="{{ request.args.get("url") or url_for("delivery.delivery_session", id_=task.delivery_session.id) }}">
+          <button class="btn btn-primary btn-large"><i class="icon-ok icon-white"></i>&nbsp;保存</button>
+          <a class="btn btn-large" href="{{ request.args.get("url") or url_for("delivery.delivery_session", id_=task.delivery_session.id) }}">
+            <i class="icon-backward"></i>&nbsp;返回
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>
+
+{% endblock %}

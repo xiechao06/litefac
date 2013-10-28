@@ -1,0 +1,25 @@
+# -*- coding: UTF-8 -*-
+"""
+this is a sample configuration file
+"""
+
+# 是否进入debug模式
+DEBUG = False
+# 强烈建议替换
+SECRET_KEY = "5L)0K%,i.;*i/s("
+
+# 使用MYSQL
+# DBSTR = "mysql://{username}:{password}@{host}/{db_name}"
+# 使用SQLITE
+# DBSTR = "sqlite:///{file_name}"
+
+BLT_IP = "127.0.0.1"
+BLT_PORT = 8888
+UPLOAD_FOLDER = "upload"
+
+LOCALE = "en_US"
+
+# the option could be "web", "webservice" or "both"(which stands for both as
+# web and webservice)
+SERVE_TYPE = "both"
+

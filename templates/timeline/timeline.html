@@ -1,0 +1,78 @@
+{% extends "__data_browser__/list.html" %}
+{% block __data_browser__custom_external_block %}
+  <style type="text/css">
+    blockquote a {
+      color: #333333;
+    }
+
+    blockquote a:hover {
+      color: #333333;
+      background-color: #EEEEDD;
+      text-decoration: None;
+    }
+
+    .well {
+      padding: 9px;
+    }
+  </style>
+  <script type="text/javascript">
+    $(function () {
+      {% if request.args.get("user_id") %}
+        $("#user").val({{ request.args.get("user_id") }}).trigger("change");
+      {% endif %}
+      {% if request.args.getlist("create_time") %}
+        var create_time_list = {{ request.args.getlist("create_time")|tojson|safe }}
+            $("[name=create_time]").each(function (idx, val) {
+              $(this).val(create_time_list[idx]);
+            });
+      {% endif %}
+      $("#reset-button").click(function () {
+        $("select").select2("val", "");
+      });
+    });
+  </script>
+{% endblock %}
+{% block lists %}
+  <div class="span10">
+    {% if __data__ %}
+      {% for grouper, list in __data__|groupby("create_date")|reverse %}
+        <div class="well well-small"><strong>{{ grouper }}:
+          {% if grouper == today %}
+            今天
+          {% elif grouper == yesterday %}
+            昨天
+          {% endif %}
+        </strong></div>
+        {% for log in list %}
+          <blockquote>
+            {% set k, v = log.url_map %}
+              {% if v %}
+                <a href="{{ v }}">
+              {% endif %}
+            <span class="muted">
+              {{ log.create_time.strftime("%H:%M") }}
+            </span>
+            {% if log.obj_cls %}
+              {{ log.obj_class }}
+              <strong>{{ log.obj }}</strong>
+            {% endif %}
+            被操作员<strong>{{ log.actor or "" }}</strong>执行了<strong>{{ log.action }}</strong>操作 -
+            <i class="initialism muted">{{ log.message }}</i>
+            {% if v %}
+              </a>
+            {% endif %}
+          </blockquote>
+        {% endfor %}
+      {% endfor %}
+      {% from "__data_browser__/macro.html" import render_pagination %}
+      {{ render_pagination(__pagination__, __count__, g.request_from_mobile) }}
+    {% else %}
+      <p class="alert alert-error">{{ _("* 没有符合条件的结果") }}</p>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block body %}
+  {{ sub_nav_bar.as_ul("active")|safe }}
+  {{ super() }}
+{% endblock %}

@@ -1,0 +1,21 @@
+<p>
+  <strong>状态</strong> - {{ '已发货' if store_bill.delivery_task else '未发货'}}
+</p>
+<p>
+  <strong>装卸点</strong> - {{ store_bill.harbor_name }}
+</p>
+<p>
+  <strong>重量</strong> - {{ store_bill.weight}}
+</p>
+<p>
+  <strong>数量</strong> - {{ store_bill.quantity }}
+</p>
+<p>
+  <strong>客户</strong> - {{ store_bill.customer.name}}
+</p>
+<p>
+  <strong>是否打印</strong> - {{ '是' if store_bill.printed else '否'}}
+</p>
+<p>
+  <strong>发货时间</strong> - {% if store_bill.delivery_task %} {{ store_bill.delivery_task.create_time }} {% else %} -- {% endif %}
+</p>

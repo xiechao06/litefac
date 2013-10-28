@@ -1,0 +1,11 @@
+{% extends "__data_browser__/form.html" %}
+{% block __data_browser__custom_external_block %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static',filename="js/fancybox/source/jquery.fancybox.css") }}" type="text/css" media="screen">
+  <script type="text/javascript" src="{{ url_for('static',filename="js/fancybox/source/jquery.fancybox.pack.js") }}"></script>
+  <script type="text/javascript">
+    $(function () {
+      $(".fancybox").fancybox();
+    })
+  </script>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block __data_browser__custom_external_block %}
+    <script type="text/javascript">
+        $(function () {
+            $('#department').val('{{ department }}');
+            $('#department').change(function () {
+                var department = $('#department').val();
+                location.href = "{{ url_for('manufacture.QI_work_command_list') }}?department=" + department;
+            });
+        });
+    </script>
+{% endblock %}
+{% block body %}
+    <div class="ym-wrapper">
+        <div class="ym-wbox">
+            <button class="ym-button" onclick="window.location.replace(delParam(location.href,'result'))">
+                刷新
+            </button>
+        </div>
+        <form action="{{ url_for('manufacture.work_command_list') }}">
+            <label for="department">加工车间</label>
+            <select name="department" id="department">
+                <option value="0">全部</option>
+                {% for department in department_list %}
+                    <option value="{{ department.id }}">{{ department.name }}</option>
+                {% endfor %}
+            </select>
+        </form>
+        <div>
+            <table class="bordertable">
+                <thead>
+                <tr>
+                    <th>工单号</th>
+                    <th>产品名称</th>
+                    <th>客户名称</th>
+                    <th>卸货点</th>
+                    <th>加工车间</th>
+                    <th>加工班组</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for work_command in work_command_list %}
+                    <tr>
+                        <td>
+                            <a href="{{ url_for('manufacture.QI_report_list',id=work_command.id) }}">{{ work_command.id }}</a>
+                        </td>
+                        <td>{{ work_command.sub_order.product.name }}</td>
+                        <td>{{ work_command.order.customer.name }}</td>
+                        <td>{{ work_command.harbor }}</td>
+                        <td>{% if work_command.department %}
+                            {{ work_command.department.name }}
+                        {% endif %}</td>
+                        <td>{% if work_command.team_id %}
+                            {{ work_command.team.name }}{% endif %}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            {% from "pagination.html" import render_pagination %}
+            {{ render_pagination(pagination) }}
+        </div>
+    </div>
+{% endblock %}
