@@ -181,7 +181,7 @@
         {% endif %}
       {% else %}
         <div class="brand">
-          LITE-MMS
+          LITEFAC
         </div>
         {% if current_user.is_authenticated() and nav_bar is defined %}
           <button class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse" type="button">
@@ -206,11 +206,10 @@
               </mark>
               您是
               <strong>
+                <mark>{{ current_user.group_name }}</mark>
                 {% if current_user.groups|length > 1 %}
                   <a href="#switch-group-modal" data-role="switch-group" data-toggle="modal">
-                {% endif %}
-                {{ current_user.group_name }}
-                {% if current_user.groups|length > 1 %}
+                    切换角色
                   </a>
                 {% endif %}
               </strong>
@@ -251,7 +250,7 @@
   <footer class="footer hidden-phone">
     <div class="container">
       <div class="muted">
-        copyright@ LITE-MMS
+        copyright@ LITEFAC
       </div>
     </div>
   </footer>

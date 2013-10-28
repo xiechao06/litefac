@@ -5,24 +5,11 @@
 #
 msgid ""
 msgstr ""
-"#-#-#-#-#  messages.po (PROJECT VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-07-11 15:51+0800\n"
+"POT-Creation-Date: 2013-08-07 17:41+0800\n"
 "PO-Revision-Date: 2013-04-04 12:40+0800\n"
 "Last-Translator: xiechao<xiechao06@gmail.com>\n"
-"Language-Team: zh_CN <LL@li.org>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 0.9.6\n"
-"#-#-#-#-#  messages.po (PROJECT VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-07-17 16:59+0800\n"
-"PO-Revision-Date: 2013-07-01 14:56+0800\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: zh_CN <LL@li.org>\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
@@ -33,7 +20,8 @@ msgstr ""
 #: action.py:41
 #, python-format
 msgid ""
-"operation %(action)s applied upon %(model_name)s - [%(models)s] successfully"
+"operation %(action)s applied upon %(model_name)s - [%(models)s] "
+"successfully"
 msgstr "%(model_name)s[%(models)s]被成功%(action)s"
 
 #: action.py:49
@@ -50,74 +38,75 @@ msgstr "%(model_name)s[%%s]不能被%(action)s"
 msgid "remove"
 msgstr "删除"
 
-#: base.py:409 base.py:1280
+#: base.py:425 base.py:1335
 #, python-format
 msgid "can't apply %(action)s due to %(reason)s"
 msgstr "操作%(action)s失败，原因是%(reason)s"
 
-#: base.py:425 base.py:1292
+#: base.py:441 base.py:1347
 #, python-format
 msgid "Failed to update %(model_name)s %(objs)s due to %(error)s"
 msgstr "更新%(model_name)s失败，原因是%(error)s"
 
-#: base.py:429 base.py:1088 base.py:1296
+#: base.py:445 base.py:1143 base.py:1351
 #, python-format
 msgid "invalid action %(action)s"
 msgstr "操作%(action)s非法"
 
-#: base.py:439
+#: base.py:455
 msgid "update"
 msgstr "更新"
 
-#: base.py:441
+#: base.py:457
 #, python-format
 msgid "%(model_name)s %(obj)s was updated and saved"
 msgstr "%(model_name)s(%(obj)s)已经被更新并保存"
 
-#: base.py:449
+#: base.py:465
 #, python-format
 msgid "Failed to update %(model_name)s %(obj)s due to %(error)s"
 msgstr "更新%(model_name)s失败，原因是%(error)s"
 
-#: base.py:486 base.py:571
+#: base.py:507 base.py:624
 #, python-format
 msgid "%(model_name)s %(model)s was created successfully"
 msgstr "成功创建%(model_name)s-(%(model)s)!"
 
-#: base.py:487 templates/__data_browser__/form_mob.html:82
+#: base.py:508 templates/__data_browser__/form_mob.html:82
 #: templates/__data_browser__/macro.html:206
 msgid "add another"
 msgstr "再增加一个"
 
-#: base.py:556
+#: base.py:609
 #, python-format
 msgid "%(user)s performed %(action)s"
 msgstr "用户%(user)s执行了%(action)s操作"
 
-#: base.py:573 templates/__data_browser__/form_mob.html:48
+#: base.py:626 templates/__data_browser__/form_mob.html:48
 #: templates/__data_browser__/list.html:278
 #: templates/__data_browser__/list_mob.html:97
 #: templates/__data_browser__/macro.html:180
 msgid "create"
 msgstr "新建"
 
-#: base.py:581 base.py:592
+#: base.py:634 base.py:645
 #, python-format
 msgid ""
-"you are viewing %(model_name)s-%(obj)s, since you have only read permission"
+"you are viewing %(model_name)s-%(obj)s, since you have only read "
+"permission"
 msgstr "您正在查看%(model_name)s-%(obj)s, 因为您只有只读权限"
 
-#: base.py:585
+#: base.py:638
 #, python-format
 msgid "edit %(model_name)s-%(objs)s"
 msgstr "正在编辑%(model_name)s-%(objs)s"
 
-#: base.py:596
+#: base.py:649
 #, python-format
 msgid "edit %(model_name)s-%(obj)s"
 msgstr "正在编辑%(model_name)s-%(obj)s"
 
-#: base.py:599
+#: base.py:652
 #, python-format
 msgid "create %(model_name)s"
 msgstr "正在创建%(model_name)s"
@@ -149,54 +138,55 @@ msgstr "该字段不能重复，该字段的值已经存在"
 
 #: convert_utils/sa.py:111
 msgid "This field is required."
-msgstr ""
+msgstr "需要该字段"
 
 #: convert_utils/sa.py:117
 #, python-format
 msgid "the input must be like %s"
-msgstr ""
+msgstr "输入必须形如%s"
 
 #: convert_utils/sa.py:122
 msgid "Invalid URL"
-msgstr ""
+msgstr "非法的URL"
 
 #: convert_utils/sa.py:129 convert_utils/sa.py:136
+#, python-format
 msgid "Invalid value, must be one of: %(values)s."
 msgstr "该字段的值必须是%(values)s"
 
 #: convert_utils/sa.py:144
 #, python-format
 msgid "Field must be at least %%(min)d character long."
-msgstr ""
+msgstr "字段长度至少为%%(min)d"
 
 #: convert_utils/sa.py:146
 #, python-format
 msgid "Field cannot be longer than %%(max)d character."
-msgstr ""
+msgstr "字段长度不能超过%%(max)d"
 
 #: convert_utils/sa.py:148
 #, python-format
 msgid "Field must be between %%(min)d and %%(max)d characters long."
-msgstr ""
+msgstr "字段长度必须大于等于%%(min)d, 小于%%(max)d"
 
 #: convert_utils/sa.py:157
 #, python-format
 msgid "Number must be greater than %%(min)s."
-msgstr ""
+msgstr "必须大于%%(min)s."
 
 #: convert_utils/sa.py:159
 #, python-format
 msgid "Number must be less than %%(max)s."
-msgstr ""
+msgstr "必须小于%%(max)s"
 
 #: convert_utils/sa.py:161
 #, python-format
 msgid "Number must be between %%(min)s and %%(max)s."
-msgstr ""
+msgstr "必须小于%%(min)s, 大于%%(max)s"
 
 #: convert_utils/sa.py:167
 msgid "Invalid email address."
-msgstr ""
+msgstr "非法的邮箱地址"
 
 #: convert_utils/sa.py:176 convert_utils/sa.py:225 form/convert.py:187
 #: form/convert.py:291
@@ -238,7 +228,7 @@ msgstr "该字段必须是合法的MAC地址"
 msgid "this field must be a valid UUID"
 msgstr "该字段必须是合法的UUID"
 
-#: form/fields.py:183 form/fields.py:233 form/fields.py:238
+#: form/fields.py:183 form/fields.py:240 form/fields.py:245
 msgid "Not a valid choice"
 msgstr "选择错误"
 
@@ -256,8 +246,9 @@ msgstr "错误"
 
 #: templates/__data_browser__/error_mob.html:16
 #: templates/__data_browser__/form_mob.html:37
-#: templates/__data_browser__/macro.html:223
-#: templates/__data_browser__/macro.html:249
+#: templates/__data_browser__/macro.html:217
+#: templates/__data_browser__/macro.html:239
+#: templates/__data_browser__/macro.html:266
 msgid "back"
 msgstr "返回"
 
@@ -288,15 +279,15 @@ msgid "Are you sure to %%s this item?"
 msgstr "您确认要对这条记录执行操作(%%s)?"
 
 #: templates/__data_browser__/form_mob.html:79
-#: templates/__data_browser__/macro.html:216
-#: templates/__data_browser__/macro.html:245
+#: templates/__data_browser__/macro.html:232
+#: templates/__data_browser__/macro.html:262
 msgid "commit"
 msgstr "提交"
 
 #: templates/__data_browser__/form_mob.html:80
-#: templates/__data_browser__/list.html:494
-#: templates/__data_browser__/macro.html:219
-#: templates/__data_browser__/macro.html:246
+#: templates/__data_browser__/list.html:508
+#: templates/__data_browser__/macro.html:235
+#: templates/__data_browser__/macro.html:263
 msgid "reset"
 msgstr "重置"
 
@@ -323,12 +314,13 @@ msgid "please choose one item!"
 msgstr "请至少选择一条记录！"
 
 #: templates/__data_browser__/list.html:142
-#: templates/__data_browser__/list.html:390
-#: templates/__data_browser__/list.html:423
+#: templates/__data_browser__/list.html:404
+#: templates/__data_browser__/list.html:437
 msgid "batch edit"
 msgstr "批量修改"
 
 #: templates/__data_browser__/list.html:149
+#, python-format
 msgid "Are you sure to %%s the selected item(s)?"
 msgstr "您确认要对选中的记录执行操作(%%s)?"
 
@@ -345,18 +337,18 @@ msgstr "没有符合条件的结果"
 msgid "totally: %(count)d"
 msgstr "共%(count)d条"
 
-#: templates/__data_browser__/list.html:445
+#: templates/__data_browser__/list.html:459
 msgid "refine search"
 msgstr "完善搜索条件"
 
-#: templates/__data_browser__/list.html:472
-#: templates/__data_browser__/list.html:474
-#: templates/__data_browser__/list.html:476
+#: templates/__data_browser__/list.html:486
+#: templates/__data_browser__/list.html:488
+#: templates/__data_browser__/list.html:490
 #, python-format
 msgid "input %(label)s here"
 msgstr "在这里输入%(label)s"
 
-#: templates/__data_browser__/list.html:493
+#: templates/__data_browser__/list.html:507
 msgid "refresh"
 msgstr "刷新"
 
@@ -422,6 +414,11 @@ msgstr "下一页"
 msgid "totally matched records: %(count)d"
 msgstr "符合筛选条件的记录总共%(count)d条"
 
+#: templates/__data_browser__/macro.html:90
+#, python-format
+msgid "Step %(step)d"
+msgstr "第%(step)d步"
+
 #: templates/__data_browser__/macro.html:140
 #: templates/__data_browser__/macro.html:149
 msgid "unique field, can't be modified"
@@ -430,6 +427,18 @@ msgstr "唯一值，不能批量修改"
 #: templates/__data_browser__/macro.html:159
 msgid "keep unchanged"
 msgstr "保持原值"
+
+#: templates/__data_browser__/macro.html:214
+msgid "Last step"
+msgstr "上一步"
+
+#: templates/__data_browser__/macro.html:221
+msgid "Next step"
+msgstr "下一步"
+
+#: templates/__data_browser__/macro.html:288
+msgid "Fields already filled"
+msgstr "已经填写的字段"
 
 #: templates/__data_browser__/on_fly_result.html:20
 msgid "congratulations"
@@ -444,318 +453,3 @@ msgstr "您成功的创建了%(model_cls)s\"%(obj)s\""
 msgid "I see"
 msgstr "我知道了"
 
-#: base.py:316 templates/report____/notification.html:165
-msgid "Enable"
-msgstr "激活"
-
-#: base.py:318 templates/report____/notification.html:163
-msgid "Disable"
-msgstr "停止"
-
-#: base.py:322
-msgid "Update Successful!"
-msgstr "更新成功"
-
-#: base.py:341
-msgid "Save Successful!"
-msgstr "保存成功"
-
-#: base.py:362
-#, python-format
-msgid "notification %(id_)s are not allowed to send to %(to)s"
-msgstr "推送%(id_)s不允许发送到%(to)s"
-
-#: base.py:421 templates/report____/data-set.html:233
-msgid "Preview"
-msgstr "预览"
-
-#: data_set.py:83
-msgid "Unknown"
-msgstr "未知"
-
-#: report_templates.py:62
-msgid "That's all"
-msgstr ""
-
-#: utils.py:159
-msgid "No Such Column"
-msgstr "没有该字段"
-
-#: templates/report____/base-report.html:21
-#, python-format
-msgid "detail of %%s"
-msgstr "%%s详情"
-
-#: templates/report____/base-report.html:27
-msgid "Load Error"
-msgstr "加载错误"
-
-#: templates/report____/base-report.html:50
-msgid "Total"
-msgstr "总计"
-
-#: templates/report____/base-report.html:59
-msgid "Display _MENU_ records per page"
-msgstr "每页展示_MENU_条记录"
-
-#: templates/report____/base-report.html:60
-msgid "Nothing found - sorry"
-msgstr "对不起，找不到数据"
-
-#: templates/report____/base-report.html:61
-msgid "Showing _START_ to _END_ of _TOTAL_ records"
-msgstr "共有_TOTAL_条数据，展示了其中_START_到_END_条"
-
-#: templates/report____/base-report.html:62
-msgid "Showing 0 to 0 of 0 records"
-msgstr "共0条数据"
-
-#: templates/report____/base-report.html:63
-msgid "filtered from _MAX_ total records"
-msgstr "从_MAX_条记录中过滤产生"
-
-#: templates/report____/base-report.html:64
-msgid "Search"
-msgstr "搜索"
-
-#: templates/report____/base-report.html:66
-msgid "Previous"
-msgstr "上一页"
-
-#: templates/report____/base-report.html:67
-msgid "Next"
-msgstr "下一页"
-
-#: templates/report____/base-report.html:68
-msgid "First"
-msgstr "首页"
-
-#: templates/report____/base-report.html:69
-msgid "Last"
-msgstr "末页"
-
-#: templates/report____/base-report.html:79
-msgid "hide detail"
-msgstr "隐藏详情"
-
-#: templates/report____/base-report.html:82
-#: templates/report____/base-report.html:127
-#: templates/report____/data-set.html:158
-msgid "show detail"
-msgstr "显示详情"
-
-#: templates/report____/base-report.html:132
-#, python-format
-msgid ""
-"created by \"%(creator)s\" at %(create_time)s, using data set <a href="
-"\"%(url)s\" title=\"%(data_set_description)s\">\"%(data_set)s\"</a>"
-msgstr ""
-"由用户\"%(creator)s\"在%(create_time)s创建, 使用的数据集和是<a href=\"%(url)s"
-"\" title=\"%(data_set_description)s\">\"%(data_set)s\"</a>"
-
-#: templates/report____/base-report.html:137
-msgid "filter conditions are: "
-msgstr "过滤条件如下:"
-
-#: templates/report____/base-report.html:152
-msgid "the customized filter condition is: "
-msgstr "定制的过滤条件如下:"
-
-#: templates/report____/base-report.html:160
-#: templates/report____/data-set.html:171
-msgid "SQL statement"
-msgstr "SQL语句"
-
-#: templates/report____/base-report.html:177
-msgid "download as: "
-msgstr "以下列格式下载: "
-
-#: templates/report____/base-report.html:187
-msgid "View Graphs"
-msgstr "查看统计图"
-
-#: templates/report____/base-report.html:195
-#: templates/report____/data-set.html:231 templates/report____/graphs.html:45
-#: templates/report____/notification.html:157
-msgid "BACK"
-msgstr "返回"
-
-#: templates/report____/base-report.html:197
-msgid "EDIT"
-msgstr "编辑"
-
-#: templates/report____/base-report.html:198
-msgid "REFRESH"
-msgstr "刷新"
-
-#: templates/report____/base-report.html:212
-msgid "Close"
-msgstr "关闭"
-
-#: templates/report____/data-set.html:115
-#, python-format
-msgid "report [%%s] has been created, go to see the report?"
-msgstr "报表[%%s]已经被成功创建！是否查看报表?"
-
-#: templates/report____/data-set.html:120
-msgid "failed to create new report, reaon is: "
-msgstr "创建报表失败，原因是:"
-
-#: templates/report____/data-set.html:133
-msgid "failed to generate report preview, reaon is: "
-msgstr "报表预览生成失败，原因是:"
-
-#: templates/report____/data-set.html:165
-#, python-format
-msgid "created by \"%(creator)s\" at %(create_time)s"
-msgstr "由\"%(creator)s\"在%(create_time)s创建"
-
-#: templates/report____/data-set.html:181
-msgid "basic information"
-msgstr "基本信息"
-
-#: templates/report____/data-set.html:183
-msgid "Report name"
-msgstr "报表名称"
-
-#: templates/report____/data-set.html:189
-msgid "Report creator"
-msgstr "创建人"
-
-#: templates/report____/data-set.html:196
-msgid "Report desc"
-msgstr "报表描述"
-
-#: templates/report____/data-set.html:203
-msgid "columns"
-msgstr "报表字段"
-
-#: templates/report____/data-set.html:218
-msgid "filters"
-msgstr "过滤条件"
-
-#: templates/report____/data-set.html:232
-msgid "Save as Report"
-msgstr "保存为报表"
-
-#: templates/report____/data-sets.html:4
-#: templates/report____/data-sets.html:18
-msgid "Data sets"
-msgstr "数据集和"
-
-#: templates/report____/default_data_set_html.html:2
-msgid "SQL"
-msgstr ""
-
-#: templates/report____/default_data_set_html.html:16
-#: templates/report____/default_html_report.html:11
-#, python-format
-msgid "search %(col_name)s"
-msgstr "搜索%(col_name)s"
-
-#: templates/report____/default_drill_down_html_report.html:4
-msgid "id"
-msgstr "编号"
-
-#: templates/report____/default_html_report.html:48
-#, python-format
-msgid "%(value)s in total"
-msgstr "总计%(value)s"
-
-#: templates/report____/default_html_report.html:57
-#, python-format
-msgid "%(value)s%% in avg."
-msgstr "平均%(value)s%%"
-
-#: templates/report____/notification-list.html:12
-#: templates/report____/notification-list.html:21
-msgid "Notifications"
-msgstr "推送列表"
-
-#: templates/report____/notification-list.html:25
-msgid "New"
-msgstr "新建"
-
-#: templates/report____/notification.html:17
-#: templates/report____/notification.html:103
-#: templates/report____/notification.html:109
-msgid "Enter E-mail"
-msgstr "请输入Email"
-
-#: templates/report____/notification.html:53
-#, python-format
-msgid "Editing %(notification)s"
-msgstr "正在编辑%(notification)s"
-
-#: templates/report____/notification.html:55
-msgid "Enabled"
-msgstr "激活"
-
-#: templates/report____/notification.html:57
-msgid "Disabled"
-msgstr "未激活"
-
-#: templates/report____/notification.html:60
-msgid "Creating notification"
-msgstr "创建推送"
-
-#: templates/report____/notification.html:66
-msgid "Only disabled notification can be edit"
-msgstr "只支持变量date和notification"
-
-#: templates/report____/notification.html:90
-msgid "Name"
-msgstr "名称"
-
-#: templates/report____/notification.html:97
-msgid "Senders"
-msgstr "推送到"
-
-#: templates/report____/notification.html:117
-msgid "reports"
-msgstr "报表列表"
-
-#: templates/report____/notification.html:128
-#: templates/report____/report_short_description.html:3
-msgid "description"
-msgstr "描述"
-
-#: templates/report____/notification.html:137
-msgid "Subject"
-msgstr "标题"
-
-#: templates/report____/notification.html:143
-msgid "Only 'date' and 'notification' supported"
-msgstr "只支持变量date和notification"
-
-#: templates/report____/notification.html:147
-msgid "Crontab"
-msgstr "周期"
-
-#: templates/report____/notification.html:159
-msgid "Save"
-msgstr "保存"
-
-#: templates/report____/report-list.html:4
-#: templates/report____/report-list.html:18
-msgid "report list"
-msgstr "报表列表"
-
-#: templates/report____/report_short_description.html:1
-msgid "creator"
-msgstr "创建人"
-
-#: templates/report____/report_short_description.html:2
-msgid "create time"
-msgstr "创建时间"
-
-#: templates/report____/report_short_description.html:4
-msgid "data set"
-msgstr "数据集和"
-
-#: templates/report____/report_short_description.html:5
-msgid "data set description"
-msgstr "数据集合描述"
-
-#~ msgid "no changes made, can't submit!"
-#~ msgstr "对象没有任何变更"

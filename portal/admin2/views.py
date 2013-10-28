@@ -35,13 +35,14 @@ class AdminModelView(ModelView):
 
 class UserModelView(AdminModelView):
 
+    can_batchly_edit = True
     edit_template = create_template = "admin2/user.html"
     column_hide_backrefs = False
 
     __list_columns__ = ["id", "username", column_spec.PlaceHolderColumnSpec("groups", label=u"用户组",
-                                                                            template_fname="admin2/user-groups-snippet.html"), 'enabled']
+                                                                            template_fname="admin2/user-groups-snippet.html"), 'default_group', 'enabled']
     __column_labels__ = {"id": u"编号", "username": u"用户名", "group": u"用户组", "password": u"密码(md5加密)",
-                         "groups": u"用户组列表", 'enabled': u'激活'}
+                         "groups": u"用户组列表", 'enabled': u'激活', 'default_group': u'默认用户组'}
     __column_formatters__ = {"enabled": lambda v, obj: u"是" if v else u"否"}
 
     class UserDeleteAction(DeleteAction):
@@ -67,7 +68,7 @@ class UserModelView(AdminModelView):
         return [UserGroupFilter(u"group", name=u"是", options=[(group.id, group.name) for group in Group.query.all()]), Contains(u'username', name=u'包含')]
 
     # ============ FORM PART ===========================
-    __create_columns__ = __form_columns__ = ["username", "password", "groups", 'enabled']
+    __create_columns__ = __form_columns__ = ["username", "password", "groups", 'enabled', 'default_group']
 
 user_model_view = UserModelView(User, u"用户")
 

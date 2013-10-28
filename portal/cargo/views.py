@@ -115,7 +115,8 @@ class UnloadSessionModelView(ModelView):
     week_ago = (today - timedelta(days=7)).date()
     _30days_ago = (today - timedelta(days=30)).date()
 
-    __column_filters__ = [filters.BiggerThan("create_time", name=u"在", default_value=str(yesterday),
+    # demo中为了展示更多数据将过滤时间设置为所有
+    __column_filters__ = [filters.BiggerThan("create_time", name=u"在", default_value=None,
                                              options=[(yesterday, u'一天内'), (week_ago, u'一周内'), (_30days_ago, u'30天内')]),
                           filters.EqualTo("plate_", name=u"是"),
                           filters.Only("status", display_col_name=u"仅展示未完成会话", test=lambda col: ~col.in_([cargo_const.STATUS_CLOSED, cargo_const.STATUS_DISMISSED]), notation="__only_unclosed"),

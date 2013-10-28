@@ -97,6 +97,8 @@ class User(db.Model):
     password = db.Column(db.String(128), nullable=False, doc=u"这里保存的是密码明文的MD5值")
     groups = db.relationship("Group", secondary=user_and_group_table,
                              backref="users")
+    default_group_id = db.Column(db.Integer, db.ForeignKey('TB_GROUP.id'))
+    default_group = db.relationship('Group')
     tag = db.Column(db.String(32), nullable=True)
     enabled = db.Column(db.Boolean, default=True)
 

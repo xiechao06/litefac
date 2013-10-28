@@ -1,21 +1,22 @@
 # -*- coding: UTF-8 -*-
 import os
 from sqlalchemy.exc import SQLAlchemyError
-from flask import Flask, render_template, request, session, g, url_for
+from flask import (Flask, render_template, request, session, g, url_for,
+                   current_app)
 from flask.ext.babel import Babel, gettext
 from flask.ext.nav_bar import FlaskNavBar
+from flask.ext.login import login_user
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object("litefac.default_settings")
-if "LITE_MMS_HOME" in os.environ:
+if "LITE_FAC_HOME" in os.environ:
     app.config.from_pyfile(
-        os.path.join(os.environ["LITE_MMS_HOME"], "config.py"), silent=True)
+        os.path.join(os.environ["LITE_FAC_HOME"], "config.py"), silent=True)
 app.config.from_pyfile(os.path.join(os.getcwd(), "config.py"), silent=True)
 from flask.ext.login import LoginManager, current_user
 login_manager = LoginManager()
 login_manager.init_app(app)
 from flask.ext.principal import Principal, Permission
-
 
 import yawf
 
@@ -208,7 +209,6 @@ nav_bar.register(report_page, name=u"数据集合列表", default_url="/report/d
 nav_bar.register(report_page, name=u"推送列表", default_url="/report/notification-list", permissions=[Permission.union(AdminPermission, AccountantPermission)], group=u'报表',
                  enabler=lambda nav: request.path.startswith('/report/notification-list'))
 nav_bar.register(to_do_page, name=u"待办事项", default_url="/todo/todo-list")
-nav_bar.register(qir_page, name=u"质检报告", default_url="/qir/qireport-list", permissions=[QualityInspectorPermission])
 nav_bar.register(work_flow_page, name=lambda: u"工作流(%d)" % models.Node.query.filter(models.Node.handle_time==None).count(),
                  default_url="/work-flow/node-list", permissions=[CargoClerkPermission])
 
@@ -222,7 +222,8 @@ app.jinja_env.globals['permissions'] = permissions
 app.jinja_env.filters['_datetimeformat'] = datetimeformat
 app.jinja_env.add_extension("jinja2.ext.loopcontrols")
 
-from flask.ext.principal import (identity_loaded, RoleNeed, UserNeed, PermissionDenied)
+from flask.ext.principal import (identity_loaded, RoleNeed, UserNeed,
+                                 PermissionDenied, identity_changed, Identity)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -255,7 +256,7 @@ def permission_handler(sender, identity):
                     group = group_
                     break
             else:
-                group = identity.user.groups[0]
+                group = identity.user.default_group or identity.user.groups[0]
         session['current_group_id'] = group.id
         identity.provides.add(RoleNeed(unicode(group.id)))
 
@@ -283,7 +284,6 @@ def permission_denied(error):
     if not current_user.is_anonymous():
         return redirect(url_for("error", msg=u'请联系管理员获得访问权限!',
                                 back_url=request.args.get("url")))
-        #如果用户还未登录则转向到登录面
     return render_template("auth/login.html",
                            error=gettext(u"请登录"), next_url=request.url, titlename=u"请登录")
 
@@ -327,14 +327,16 @@ def call_after_request_callbacks(response):
     return response
 
 
-@babel.localeselector
-def get_locale():
-    return "zh_CN"
-
-
 @app.before_request
 def _():
-    g.locale = get_locale()
+    from litefac import apis
+
+    # 需要以guest用户身份登录
+    user = apis.auth.authenticate('guest', 'guest')
+    login_user(user)
+    identity_changed.send(current_app._get_current_object(),
+                          identity=Identity(user.id))
+    #g.locale = get_locale()
 
 from work_flow_repr import Event
 from work_flow_repr.utils import ModelNode, annotate_model
