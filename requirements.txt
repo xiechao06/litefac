@@ -1,8 +1,7 @@
 path.py>=3.0.1
 CodernityDB>=0.4.2
 APScheduler>=2.1.1
--e git+https://github.com/xiechao06/Flask-NavBar.git@f4c19e3729953d1429cfa2c9e26036e023c6f0d8#egg=Flask_NavBar-dev
--e git+https://github.com/xiechao06/Flask-Report.git#egg=Flask_Report-dev
+-e git+https://github.com/xiechao06/Flask-Report.git@516fd5428f24639a9db0ed27253cc80369e89b17#egg=Flask_Report-dev
 -e git+https://github.com/xiechao06/lite-sm.git@9204dcaba550ab8da9450576ba95c54c93259406#egg=lite_sm-dev
 -e git+https://github.com/xiechao06/nav-bar.git@48a007c1e1b589d40e58669ae7b40a6900d71c79#egg=nav_bar-dev
 -e git+https://github.com/xiechao06/WorkFlowRepr.git#egg=work_flow_repr-dev
@@ -15,3 +14,4 @@ import-file>=1.11
 MySQL-python>=1.2.3
 Flask-Babel>=0.8
 Babel>=1.3
+sqlparse==0.1.10
