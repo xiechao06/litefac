@@ -27,9 +27,8 @@ class UserWrapper(login.UserMixin, ModelWrapper):
     @property
     def permissions(self):
         ret = set()
-        for group in self.groups:
-            for perm in group.permissions:
-                ret.add(perm)
+        for perm in self.group.permissions:
+            ret.add(perm)
         return ret
 
     @property
@@ -62,10 +61,10 @@ class UserWrapper(login.UserMixin, ModelWrapper):
         """
         test if the user could login in client
         """
-        can_login_groups = { 
-            groups.DEPARTMENT_LEADER, 
-            groups.TEAM_LEADER, 
-            groups.LOADER, 
+        can_login_groups = {
+            groups.DEPARTMENT_LEADER,
+            groups.TEAM_LEADER,
+            groups.LOADER,
             groups.QUALITY_INSPECTOR
         }
         return all(group.id in can_login_groups for group in self.groups)
