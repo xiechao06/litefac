@@ -169,6 +169,16 @@
           <button class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse" type="button">
             <i class="icon-reorder"></i>
           </button>
+          <bold class="navbar-text pull-right">
+            <strong>
+              <mark>{{ current_user.group_name }}</mark>
+              {% if current_user.groups|length > 1 %}
+                <a href="#switch-group-modal" data-role="switch-group" data-toggle="modal">
+                  切换角色
+                </a>
+              {% endif %}
+            </strong>
+          </bold>
           <nav class="nav-collapse">
             {{ nav_bar.as_ul("active")|safe }}
             <ul class="nav">

@@ -186,9 +186,6 @@ nav_bar.register(consignment_page, name=u'发货单',
                  permissions=[CargoClerkPermission.union(AccountantPermission)], group=u"发货管理")
 nav_bar.register(manufacture_page, name=u"工单管理",
                  permissions=[SchedulerPermission])
-#nav_bar.register(delivery_page, name=u"发货单管理",
-                 #default_url="/delivery/consignment-list",
-                 #permissions=[AccountantPermission])
 nav_bar.register(manufacture_page, name=u"质检管理",
                  default_url="/manufacture/qir-list",
                  permissions=[DepartmentLeaderPermission])

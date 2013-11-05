@@ -19,6 +19,16 @@
         <button class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse" type="button">
           <i class="icon-reorder"></i>
         </button>
+        <bold class="navbar-text pull-right">
+          <strong>
+            <mark>{{ current_user.group_name }}</mark>
+            {% if current_user.groups|length > 1 %}
+              <a href="#switch-group-modal" data-role="switch-group" data-toggle="modal">
+                切换角色
+              </a>
+            {% endif %}
+          </strong>
+        </bold>
         <nav class="nav-collapse">
           {{ nav_bar.as_ul("active")|safe }}
           <ul class="nav">
@@ -71,6 +81,30 @@
     {% endif %}
   </div>
 </header>
+<div id="switch-group-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">切换角色</h3>
+  </div>
+  <div class="modal-body">
+    <ul class="nav nav-pills nav-stacked">
+      {% for group in current_user.groups %}
+        {% if group.id == current_user.group.id %}
+          <li class='active pagination-centered'>
+            <a href='#'><b>{{ group.name }} (当前角色)</b></a>
+          </li>
+        {% else %}
+          <li class='pagination-centered'>
+            <a href="{{ url_for('auth.switch_group', id_=group.id) }}"><b>{{ group.name }}</b></a>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
 {% endblock %}
 
 {% block report____footer_block %}

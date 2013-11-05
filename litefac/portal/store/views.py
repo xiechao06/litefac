@@ -102,6 +102,11 @@ class StoreBillModelView(ModelView):
     @login_required
     def try_view(self, processed_objs=None):
         pass
+
+
+    def repr_obj(self, obj):
+        return u"%d-%s(%d公斤)" % (obj.id, obj.customer.name, obj.weight)
+
 store_bill_view = StoreBillModelView(models.StoreBill, u"仓单")
 
 
